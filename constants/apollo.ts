@@ -1,0 +1,1 @@
+export const ApolloUri = 'https://dienkhoiland.vn/graphql'
