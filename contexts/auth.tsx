@@ -9,6 +9,44 @@ import Login from "../components/auth/login";
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
 
+Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+        shouldShowAlert: true,
+        shouldPlaySound: false,
+        shouldSetBadge: false,
+    }),
+});
+
+async function registerForPushNotificationsAsync() {
+    let token;
+    if (Device.isDevice) {
+        const { status: existingStatus } = await Notifications.getPermissionsAsync();
+        let finalStatus = existingStatus;
+        if (existingStatus !== 'granted') {
+            const { status } = await Notifications.requestPermissionsAsync();
+            finalStatus = status;
+        }
+        if (finalStatus !== 'granted') {
+            alert('Quyền gửi thông báo chưa được cho phép!');
+            return;
+        }
+        token = (await Notifications.getDevicePushTokenAsync()).data;
+    } else {
+        alert('Bạn phải dùng thiết bị di động để nhận thông báo');
+    }
+
+    if (Platform.OS === 'android') {
+        Notifications.setNotificationChannelAsync('default', {
+            name: 'default',
+            importance: Notifications.AndroidImportance.MAX,
+            vibrationPattern: [0, 250, 250, 250],
+            lightColor: '#FF231F7C',
+        });
+    }
+
+    return token;
+}
+
 interface AuthenticationInterface {
     user: Profile | null | undefined
     loading: boolean
@@ -85,9 +123,9 @@ export function AuthProvider({ children }: { children: any }) {
     }, [profileData, profileError])
 
     const login = useCallback(async (phone: string, password: string) => {
-        const expoPushToken = (await Notifications.getDevicePushTokenAsync()).data
+        const expoPushToken = await registerForPushNotificationsAsync()
         const OS = Device.osName
-        
+
         loginQuery({
             variables: {
                 account: {
