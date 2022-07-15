@@ -3,8 +3,8 @@ import { ProjectInterface } from "../../types/interfaces/project";
 import { PaginationFilter } from "../../types/interfaces/realEstate";
 
 export const GET_PROJECT_POSTS = gql`
-    query projects($filter: ProjectFilter, $paging: PaginationArgs) {
-        getProjects(filter: $filter, paging: $paging) {
+    query projects($filter: ProjectFilter, $paging: PaginationArgs, $search: String) {
+        getProjects(filter: $filter, paging: $paging, search: $search) {
             _id
             projectName
             media {
@@ -38,6 +38,7 @@ export interface ProjectFilterInterface {
 export interface GetProjectsVars {
     filter?: ProjectFilterInterface
     paging?: PaginationFilter
+    search?: string
 }
 
 export interface GetProjectsData {

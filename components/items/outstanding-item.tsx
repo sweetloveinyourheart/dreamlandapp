@@ -1,4 +1,4 @@
-import { FunctionComponent } from "react";
+import { FunctionComponent, useCallback } from "react";
 import { Image, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Ant from 'react-native-vector-icons/AntDesign'
 import Ionicons from 'react-native-vector-icons/Ionicons'
@@ -7,6 +7,9 @@ import SpinnerLoading from "../loading/spinner";
 import { ItemDataDisplay } from "./rs-items";
 import Moment from 'moment';
 import { moneyConverter } from "../../libs/moneyConverter";
+import { useNavigation } from "@react-navigation/native";
+import { useViewHistory } from "../../contexts/view-history";
+import { RealEstateCategory } from "../../types/enums/realEstate";
 
 interface OutstandingItemsProps {
     loading: boolean
@@ -14,6 +17,15 @@ interface OutstandingItemsProps {
 }
 
 const OutstandingItems: FunctionComponent<OutstandingItemsProps> = ({ data, loading }) => {
+    const navigation = useNavigation();
+
+    const { storeItem } = useViewHistory()
+
+    const onSelect = useCallback((item: ItemDataDisplay) => {
+        // @ts-ignore
+        navigation.navigate('post-screen', { directLink: item.directLink, type: item.__typename })
+        storeItem(item)
+    }, [navigation])
 
     if (loading) {
         return <SpinnerLoading height={200} />
@@ -22,7 +34,7 @@ const OutstandingItems: FunctionComponent<OutstandingItemsProps> = ({ data, load
     const renderItems = () => {
         return data.map((item, index) => {
             return (
-                <TouchableOpacity style={styles.item} key={index}>
+                <TouchableOpacity style={styles.item} key={index} onPress={() => onSelect(item)}>
                     <Image
                         source={{ uri: item.media.images[0] }}
                         style={styles.image}
@@ -37,7 +49,7 @@ const OutstandingItems: FunctionComponent<OutstandingItemsProps> = ({ data, load
                             displayType={'text'}
                             thousandSeparator={true}
                             // @ts-ignore
-                            renderText={(value: any, props: any) => (<Text {...props}>{moneyConverter(value)}</Text>)}
+                            renderText={(value: any, props: any) => (<Text {...props}>{moneyConverter(value)} {item.category === RealEstateCategory.ChoThue ? "/tháng" : ""}</Text>)}
                         />
                     </Text>
                     <View style={styles.info}>

@@ -81,19 +81,11 @@ function RealEstateScreen({ route }: any) {
     })
 
     useEffect(() => {
-        if (route.params?.category) {
-            setFilter(prevS => ({
-                ...prevS,
-                category: route.params.category
-            }))
-        }
-
-        if (route.params?.project) {
-            setFilter(prevS => ({
-                ...prevS,
-                project: route.params.project
-            }))
-        }
+        setFilter(prevS => ({
+            ...prevS,
+            ...(route.params?.category && { category: route.params.category }),
+            ...(route.params?.project && { project: route.params.project })
+        }))
     }, [route.params])
 
     useEffect(() => {
@@ -194,7 +186,7 @@ function RealEstateScreen({ route }: any) {
                 <ScrollView>
                     <RealEstateCategory category={filter.category} type={postsType} onChangeType={onChangeType} />
                     <View style={{ padding: 12, backgroundColor: "#fff" }}>
-                        <RealEstateItem data={posts} display={dataDisplay} />
+                        <RealEstateItem category={filter.category} data={posts} display={dataDisplay} />
                     </View>
                 </ScrollView>
             </SafeAreaView>

@@ -17,6 +17,7 @@ import { onError } from "@apollo/client/link/error";
 import { REFRESH_TOKEN } from "./graphql/queries/auth";
 import ViewHistoryProvider from "./contexts/view-history";
 import FlashMessage from "react-native-flash-message";
+import SearchScreen from "./screens/search-screen";
 
 let client: ApolloClient<any>
 
@@ -99,6 +100,7 @@ export default function App() {
                 <Stack.Screen name='post-screen' component={RSPostScreen} />
                 <Stack.Screen name='project-screen' component={ProjectScreen} />
                 <Stack.Screen name='upload-screen' component={UploadScreen} />
+                <Stack.Screen name='search-screen' component={SearchScreen} />
               </Stack.Navigator>
               <FlashMessage position="center" />
             </AddressProvider>

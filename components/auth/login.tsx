@@ -4,11 +4,12 @@ import Ant from 'react-native-vector-icons/AntDesign'
 import { loginImage } from "../../constants/images";
 
 interface LoginProps {
+    error: string | undefined
     loading: boolean
     login: (phone: string, password: string) => void
 }
 
-const Login: FunctionComponent<LoginProps> = ({ loading, login  }) => {
+const Login: FunctionComponent<LoginProps> = ({ loading, login, error  }) => {
     const [loginForm, setLoginForm] = useState({
         phone: '',
         password: ''
@@ -76,6 +77,9 @@ const Login: FunctionComponent<LoginProps> = ({ loading, login  }) => {
                         )
                     }
                 </View>
+                {error
+                    && <Text style={{textAlign: 'center', color: "#f30606"}}>{error}</Text>
+                }
             </View>
         </View>
     );

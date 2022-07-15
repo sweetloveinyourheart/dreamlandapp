@@ -5,28 +5,11 @@ import Ant from 'react-native-vector-icons/AntDesign'
 import { CreateTransactionData, CreateTransactionVars, CREATE_TRANSACTION } from "../../graphql/mutations/transaction";
 import { Post } from "../upload/upload";
 import { showMessage } from "react-native-flash-message";
+import { typenameToEnum } from "../../libs/enumConverter";
 
 interface RSPostFooterProps {
     data: Post & { _id: string }
     type: string | undefined
-}
-
-function typenameToEnum(type: string | undefined) {
-    switch (type) {
-        case "Apartment":
-            return "CanHo"
-        case "House":
-            return "NhaO"
-        case "Land":
-            return "Dat"
-        case "BusinessPremises":
-            return "VanPhong"
-        case "Motal":
-            return "PhongTro"
-
-        default:
-            return ""
-    }
 }
 
 const RSPostFooter: FunctionComponent<RSPostFooterProps> = ({ data, type }) => {
@@ -91,7 +74,7 @@ const RSPostFooter: FunctionComponent<RSPostFooterProps> = ({ data, type }) => {
                         name="lock1"
                         size={20}
                         style={{ paddingRight: 2 }}
-                        color="#f93707"
+                        color={isRequested ? "#777" : "#f93707" }
                     />  Giao dịch
                 </Text>
             </TouchableOpacity>

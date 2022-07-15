@@ -41,7 +41,7 @@ interface RealEstateItemsProps {
     category: RealEstateCategory
 }
 
-export const RealEstateItem: FunctionComponent<{ data: ItemDataDisplay[], display: 'horizontal' | 'vertical' | 'column' }> = ({ display, data }) => {
+export const RealEstateItem: FunctionComponent<{ data: ItemDataDisplay[], display: 'horizontal' | 'vertical' | 'column', category: RealEstateCategory }> = ({ display, data, category }) => {
     const navigation = useNavigation();
 
     const { storeItem } = useViewHistory()
@@ -103,7 +103,7 @@ export const RealEstateItem: FunctionComponent<{ data: ItemDataDisplay[], displa
                                 displayType={'text'}
                                 thousandSeparator={true}
                                 // @ts-ignore
-                                renderText={(value: any, props: any) => (<Text {...props}>{moneyConverter(value)}</Text>)}
+                                renderText={(value: any, props: any) => (<Text {...props}>{moneyConverter(value)}{category === RealEstateCategory.ChoThue ? "/tháng" : ""}</Text>)}
                             />
                         </Text>
                         <View style={[styles.info, { marginTop: display === 'vertical' ? 16 : 8 }]}>
@@ -141,7 +141,7 @@ const RealEstateView: FunctionComponent<RealEstateItemsProps> = ({ data, loading
     return (
         <View style={styles.container}>
             <Text style={styles.title}>{title}</Text>
-            <RealEstateItem data={data} display='horizontal' />
+            <RealEstateItem data={data} display='horizontal' category={category} />
             <View style={styles.moreArea}>
                 <Pressable
                     // @ts-ignore

@@ -11,6 +11,7 @@ import { apartmentTypeSpeaker, directionSpeaker, furnitureSpeaker, houseTypeSpea
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import AddressViewer from "./modal/address";
 import VirtualViewer from "./modal/virtual";
+import { RealEstateCategory } from "../../types/enums/realEstate";
 
 interface RSDetailProps {
     data: Post & { timeStamp: Date }
@@ -77,7 +78,7 @@ const RSDetail: FunctionComponent<RSDetailProps> = ({ data, type }) => {
                     displayType={'text'}
                     thousandSeparator={true}
                     // @ts-ignore
-                    renderText={(value: any, props: any) => (<Text {...props}>{moneyConverter(value)}</Text>)}
+                    renderText={(value: any, props: any) => (<Text {...props}>{moneyConverter(value)} {data.category === RealEstateCategory.ChoThue ? "/tháng" : ""}</Text>)}
                 />
             </Text>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>

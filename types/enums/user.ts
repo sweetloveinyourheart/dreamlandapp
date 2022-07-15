@@ -1,11 +1,11 @@
 export enum Sex {
-    Male = 'male',
-    FeMale = 'female',
-    Other = 'other'
+    Male = 'Male',
+    FeMale = 'Female',
+    Other = 'Other'
 }
 
 export enum UserRole {
-    Admin = "admin",
-    Manager = 'manager',
-    User = "user"
+    Admin = "Admin",
+    Manager = 'Manager',
+    User = "User"
 }

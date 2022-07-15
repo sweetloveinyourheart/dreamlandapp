@@ -1,20 +1,18 @@
 import { useNavigation } from "@react-navigation/native";
-import { FunctionComponent } from "react";
+import { FunctionComponent, useCallback, useState } from "react";
 import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 import Ionicon from 'react-native-vector-icons/Ionicons'
 
 interface PJBrowseHeaderProps {
-
+    onSearch: (text: string) => void
 }
 
-const PJBrowseHeader: FunctionComponent<PJBrowseHeaderProps> = () => {
-    const navigation = useNavigation();
+const PJBrowseHeader: FunctionComponent<PJBrowseHeaderProps> = ({ onSearch }) => {
+    const [search, setSearch] = useState<string>("")
 
-    const onGoback = () => {
-        if(navigation.canGoBack()) {
-            navigation.goBack()
-        }
-    }
+    const onActiveSearch = useCallback(() => {
+        onSearch(search)
+    }, [search])
 
     return (
         <View style={styles.container}>
@@ -22,8 +20,13 @@ const PJBrowseHeader: FunctionComponent<PJBrowseHeaderProps> = () => {
                 {/* <View style={styles.logo}>
                     <Image source={logo} style={styles.image} />
                 </View> */}
-                <TextInput style={styles.input} placeholder="Tìm kiếm dự án" />
-                <TouchableOpacity style={styles.searchBtn}>
+                <TextInput 
+                    style={styles.input} 
+                    placeholder="Tìm kiếm dự án" 
+                    value={search} 
+                    onChangeText={txt => setSearch(txt)}
+                />
+                <TouchableOpacity style={styles.searchBtn} onPress={() => onActiveSearch()}>
                     <Ionicon
                         name="search-outline"
                         size={24}

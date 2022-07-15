@@ -1,5 +1,5 @@
 import { useLazyQuery } from "@apollo/client";
-import { FunctionComponent, useEffect, useState } from "react";
+import { FunctionComponent, useCallback, useEffect, useState } from "react";
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import NumberFormat from "react-number-format";
 import {
@@ -8,14 +8,15 @@ import {
     GET_HOUSE_BY_ID,
     GET_LAND_BY_ID,
     GET_MOTAL_BY_ID
-}
-    from "../../graphql/queries/transaction";
+} from "../../graphql/queries/transaction";
 import { moneyConverter } from "../../libs/moneyConverter";
 import { TransactionInterface } from "../../types/interfaces/transaction";
 import SpinnerLoading from "../loading/spinner";
 import { Post } from "../upload/upload";
 import Ant from 'react-native-vector-icons/AntDesign'
 import { TransactionStatus } from "../../types/enums/transaction";
+import { useNavigation } from "@react-navigation/native";
+import { enumToTypename } from "../../libs/enumConverter";
 
 
 interface TransactionItemsProps {
@@ -23,13 +24,15 @@ interface TransactionItemsProps {
 }
 
 const Item = ({ transaction }: { transaction: TransactionInterface }) => {
-    const [post, setPost] = useState<Post>()
+    const [post, setPost] = useState<Post & { directLink: string }>()
 
     const [apartmentQuery, { data: apartmentData }] = useLazyQuery(GET_APARTMENT_BY_ID)
     const [houseQuery, { data: houseData }] = useLazyQuery(GET_HOUSE_BY_ID)
     const [landQuery, { data: landData }] = useLazyQuery(GET_LAND_BY_ID)
     const [premisesQuery, { data: premisesData }] = useLazyQuery(GET_BUSINESS_PREMISES_BY_ID)
     const [motalQuery, { data: motalData }] = useLazyQuery(GET_MOTAL_BY_ID)
+
+    const navigation = useNavigation()
 
     useEffect(() => {
         switch (transaction.item.itemType) {
@@ -100,12 +103,17 @@ const Item = ({ transaction }: { transaction: TransactionInterface }) => {
         }
     }, [apartmentData, houseData, landData, premisesData, motalData])
 
+    const onViewPost = useCallback((directLink: string, type: string) => {
+        // @ts-ignore
+        navigation.navigate('post-screen', { directLink, type: enumToTypename(type) })
+    }, [navigation])
+
     if (!post) {
         return <SpinnerLoading height={60} />
     }
 
     return (
-        <TouchableOpacity style={styles.item}>
+        <TouchableOpacity style={styles.item} onPress={() => onViewPost(post.directLink, transaction.item.itemType)}>
             <View style={styles.image}>
                 <Image
                     source={{ uri: post?.media?.images[0] }}

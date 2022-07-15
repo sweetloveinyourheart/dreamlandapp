@@ -55,12 +55,6 @@ const UserScreen: FunctionComponent<UserScreenProps> = () => {
                             )
                         }
                         <TouchableOpacity
-                            style={[styles.actionItem, { backgroundColor: "#ffb41f" }]}
-                            onPress={() => linkTo('/upload-screen')}
-                        >
-                            <Text style={styles.actionItemTxt}>Thêm bài đăng</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
                             style={styles.actionItem}
                             onPress={() => logout()}
                         >

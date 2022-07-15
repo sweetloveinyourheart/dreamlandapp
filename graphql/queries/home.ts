@@ -271,6 +271,7 @@ export const GET_OUTSTANDING_POSTS = gql`
             apartments {
                 __typename
                 title
+                category
                 media {
                     images
                 }

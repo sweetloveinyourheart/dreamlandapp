@@ -175,9 +175,12 @@ const RealEstateFilter: FunctionComponent<RealEstateFilterProps> = ({ display, o
                         <View style={styles.addressTxt}>
                             <Text numberOfLines={1} ellipsizeMode='tail' >
                                 {filter.address
-                                    ? filter.address.province
-                                    + (filter.address.district ? " - " + filter.address.district : '')
-                                    + (filter.address.ward ? " - " + filter.address.ward : '')
+                                    ? (filter.address.province
+                                        ? filter.address.province
+                                        + (filter.address.district ? " - " + filter.address.district : '')
+                                        + (filter.address.ward ? " - " + filter.address.ward : '')
+                                        : "Toàn quốc"
+                                    )
                                     : `Toàn quốc`
                                 }
                             </Text>

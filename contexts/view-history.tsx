@@ -38,7 +38,7 @@ export default function ViewHistoryProvider({ children }: any) {
         }
 
         setHistory(current)
-    }, [history])
+    }, [history, setHistory])
 
     const memoedValue = useMemo(() => ({
         history,

@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client";
 
 export const LOGIN = gql`
-    query($account: LoginInput!) {
-        login(account: $account) {
+    query($account: LoginInput!, $device: UpdateDevice) {
+        login(account: $account, device: $device) {
             accessToken
             refreshToken
         }
@@ -19,6 +19,10 @@ export interface LoginVars {
     account: {
         phone: string
         password: string
+    }
+    device?: {
+        OS: string
+        expoPushToken: string
     }
 }
 

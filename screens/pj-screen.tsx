@@ -9,11 +9,13 @@ import { ProjectInterface } from "../types/interfaces/project";
 
 function ProjectsScreen() {
     const [filter, setFilter] = useState<ProjectFilterInterface>()
+    const [search, setSearch] = useState<string | undefined>()
     const [posts, setPosts] = useState<ProjectInterface[]>([])
 
     const { data, error } = useQuery<GetProjectsData, GetProjectsVars>(GET_PROJECT_POSTS, {
         variables: {
-            filter
+            filter,
+            search
         },
         notifyOnNetworkStatusChange: true
     })
@@ -28,12 +30,19 @@ function ProjectsScreen() {
         setFilter(filter)
     }, [setFilter])
 
+    const onSearch = useCallback((text: string) => {
+        setSearch(text)
+    }, [setSearch])
+
     return (
         <Fragment>
             <SafeAreaView style={{ flex: 0, backgroundColor: '#ffb41f' }} />
             <SafeAreaView style={{ flex: 1 }}>
-                <PJBrowseHeader />
-                <ProjectFilter initialFilter={filter} onApplyFilter={onApplyFilter}/>
+                <PJBrowseHeader onSearch={onSearch} />
+                <ProjectFilter 
+                    initialFilter={filter} 
+                    onApplyFilter={onApplyFilter}
+                />
                 <ScrollView>
                     <View style={{ padding: 12, backgroundColor: "#fff" }}>
                         <ProjectItems display={'vertical'} data={posts} />

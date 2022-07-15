@@ -2,10 +2,14 @@ import { FunctionComponent } from "react";
 import { Image, StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 import { logoImage } from "../../constants/images";
 import Ionicon from 'react-native-vector-icons/Ionicons'
+import { useLinkTo } from "@react-navigation/native";
 
 interface HeaderProps {}
 
 const Header: FunctionComponent<HeaderProps> = () => {
+
+    const linkTo = useLinkTo()
+
     return (
         <View style={styles.container}>
             <View style={styles.logo}>
@@ -15,7 +19,7 @@ const Header: FunctionComponent<HeaderProps> = () => {
                 />
             </View>
             <View style={styles.searchArea}>
-                <TouchableOpacity style={styles.searchBtn}>
+                <TouchableOpacity style={styles.searchBtn} onPress={() => linkTo('/search-screen')}>
                     <Ionicon
                         name="search-outline"
                         size={24}

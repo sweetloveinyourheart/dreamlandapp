@@ -10,6 +10,7 @@ export const GET_PROFILE = gql`
             birthday
             sex
             createdAt
+            roles
         }
     }
 `

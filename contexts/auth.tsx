@@ -1,4 +1,4 @@
-import { useLazyQuery } from "@apollo/client";
+import { useApolloClient, useLazyQuery } from "@apollo/client";
 import { createContext, Fragment, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { LOGIN, LoginData, LoginVars } from "../graphql/queries/auth";
 import { GetProfileData, GET_PROFILE } from "../graphql/queries/user";
@@ -6,6 +6,8 @@ import { Profile } from "../types/interfaces/user";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { KeyboardAvoidingView, Platform, SafeAreaView } from "react-native";
 import Login from "../components/auth/login";
+import * as Notifications from 'expo-notifications';
+import * as Device from 'expo-device';
 
 interface AuthenticationInterface {
     user: Profile | null | undefined
@@ -23,6 +25,7 @@ export function useAuth() {
 export function AuthProvider({ children }: { children: any }) {
     const [user, setUser] = useState<Profile | null | undefined>(undefined)
     const [loading, setLoading] = useState<boolean>(false);
+    const [error, setError] = useState<string | undefined>()
 
     const [profileQuery, { data: profileData, error: profileError, loading: profileLoading }] = useLazyQuery<GetProfileData>(GET_PROFILE, {
         notifyOnNetworkStatusChange: true,
@@ -33,26 +36,34 @@ export function AuthProvider({ children }: { children: any }) {
         fetchPolicy: 'network-only'
     })
 
+    const client = useApolloClient()
+
     useEffect(() => {
         // First query for profile if refresh token is exist
-        (async () => {
-            const exist = await AsyncStorage.getItem('refreshToken')
-            if (exist) {
-                // Retry request
-                if (user === undefined)
-                    setInterval(() => profileQuery(), 500)
-            }
-        })()
-    }, [])
+        if (user === undefined)
+            (async () => {
+                const exist = await AsyncStorage.getItem('refreshToken')
+
+                if (exist) {
+                    // Retry request
+                    profileQuery()
+                }
+            })()
+    }, [user])
 
     useEffect(() => {
         // handle login query data
         if (loginData && !loginError) {
             (async () => {
+                setError(undefined)
                 await AsyncStorage.setItem('accessToken', loginData.login.accessToken)
                 await AsyncStorage.setItem('refreshToken', loginData.login.refreshToken)
                 profileQuery()
             })()
+        }
+
+        if (loginError) {
+            setError('Đăng nhập thất bại, vui lòng thử lại')
         }
 
     }, [loginData, loginError])
@@ -73,22 +84,27 @@ export function AuthProvider({ children }: { children: any }) {
         }
     }, [profileData, profileError])
 
-    const login = useCallback((phone: string, password: string) => {
+    const login = useCallback(async (phone: string, password: string) => {
+        const expoPushToken = (await Notifications.getDevicePushTokenAsync()).data
+        const OS = Device.osName
+        
         loginQuery({
             variables: {
                 account: {
                     phone,
                     password
-                }
+                },
+                ...((expoPushToken && OS) && { device: { expoPushToken, OS } })
             }
         })
     }, [loginQuery])
 
     const logout = useCallback(async () => {
-        await AsyncStorage.removeItem('refreshToken')
-        await AsyncStorage.removeItem('accessToken')
+        await AsyncStorage.clear()
+        await client.clearStore()
         setUser(null)
-    }, [AsyncStorage])
+
+    }, [AsyncStorage, user])
 
     const memoedValue = useMemo(() => ({
         user,
@@ -104,7 +120,7 @@ export function AuthProvider({ children }: { children: any }) {
                 <SafeAreaView style={{ flex: 0, backgroundColor: '#fff' }} />
                 <SafeAreaView style={{ flex: 1 }}>
                     <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1 }}>
-                        <Login loading={loading} login={login} />
+                        <Login loading={loading} login={login} error={error} />
                     </KeyboardAvoidingView>
                 </SafeAreaView>
             </Fragment>

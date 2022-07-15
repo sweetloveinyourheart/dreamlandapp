@@ -13,9 +13,6 @@ import {
     GET_MOTAL_POST_BY_DIRECT_LINK
 } from "../graphql/queries/posts";
 
-const itemImg = require('../assets/test/item1.jpg')
-const itemImg2 = require('../assets/test/items1.jpg')
-
 function RSPostScreen({ route }: { route: any }) {
     const [data, setData] = useState<any>()
 

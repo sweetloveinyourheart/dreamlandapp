@@ -390,12 +390,7 @@ const UploadPost: FunctionComponent<UploadPostProps> = () => {
                                 <Text style={styles.itemTitle}>Danh mục bất động sản</Text>
                                 <View style={styles.uploadContent}>
                                     <View style={styles.categories}>
-                                        <Pressable
-                                            style={[styles.category, { backgroundColor: post.category === RealEstateCategory.MuaBan ? "#f93707" : "#eee" }]}
-                                            onPress={() => setPost(s => ({ ...s, category: RealEstateCategory.MuaBan }))}
-                                        >
-                                            <Text style={{ color: post.category === RealEstateCategory.MuaBan ? "#fff" : "#222" }}>Mua bán</Text>
-                                        </Pressable>
+                                        {postType !== RealEstateType.PhongTro}
                                         <Pressable
                                             style={[styles.category, { backgroundColor: post.category === RealEstateCategory.ChoThue ? "#f93707" : "#eee" }]}
                                             onPress={() => setPost(s => ({ ...s, category: RealEstateCategory.ChoThue }))}
