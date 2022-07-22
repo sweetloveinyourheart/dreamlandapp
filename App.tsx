@@ -2,7 +2,7 @@ import "./ignoreWarning"
 import { StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { Tabs } from './tabs/bottom-navigation';
-import { ApolloClient, InMemoryCache, ApolloProvider, createHttpLink, ApolloLink, fromPromise, Observable, } from '@apollo/client';
+import { ApolloClient, InMemoryCache, ApolloProvider, createHttpLink, ApolloLink, fromPromise } from '@apollo/client';
 import { AppRegistry } from 'react-native';
 import { ApolloUri } from './constants/apollo';
 import { createStackNavigator } from '@react-navigation/stack';

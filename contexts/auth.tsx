@@ -30,7 +30,7 @@ async function registerForPushNotificationsAsync() {
             alert('Quyền gửi thông báo chưa được cho phép!');
             return;
         }
-        token = (await Notifications.getDevicePushTokenAsync()).data;
+        token = (await Notifications.getExpoPushTokenAsync()).data;
     } else {
         alert('Bạn phải dùng thiết bị di động để nhận thông báo');
     }

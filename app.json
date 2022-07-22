@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "dreamlandapp",
-    "slug": "dreamlandapp",
+    "name": "dienkhoiland",
+    "slug": "dienkhoiland",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -19,6 +19,8 @@
     ],
     "ios": {
       "supportsTablet": true,
+      "bundleIdentifier": "com.bgroup.dienkhoiland",
+      "buildNumber": "0.0.1",
       "infoPlist": {
         "NSPhotoLibraryUsageDescription": "Ứng dụng cần truy cập vào Thư viện để tải hình ảnh bài đăng"
       }
@@ -27,7 +29,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.bgroup.dienkhoiland"
     },
     "web": {
       "favicon": "./assets/favicon.png"
