@@ -84,7 +84,14 @@ const ProjectView: FunctionComponent<ProjectViewProps> = ({ data, loading }) => 
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Dự án bất động sản</Text>
-            <ProjectItems data={data} display="horizontal" />
+            {data.length === 0
+                ? (
+                    <View style={styles.noItems}>
+                        <Text style={styles.noItemsTxt}>Chưa có dự án hiển thị</Text>
+                    </View>
+                )
+                : <ProjectItems data={data} display="horizontal" />
+            }
             <View style={styles.moreArea}>
                 <Pressable onPress={() => linkTo('/pj-screen')}>
                     <Text style={styles.moreTxt}> Xem thêm dự án </Text>
@@ -138,6 +145,16 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: "#14a7fa",
         fontWeight: '500'
+    },
+    noItems: {
+        borderTopWidth: 1,
+        borderTopColor: "#dcdcdc",
+        height: 150,
+        justifyContent: 'center'
+    },
+    noItemsTxt: {
+        textAlign: 'center',
+        color: "#777"
     }
 })
 

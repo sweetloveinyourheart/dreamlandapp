@@ -10,11 +10,18 @@
     "preview": {
       "distribution": "internal"
     },
-    "production": {}
+    "production": {
+      "android": {
+        "buildType": "apk"
+     }
+    }
   },
   "submit": {
     "production": {
-      "android": {},
+      "android": {
+        "serviceAccountKeyPath": "./constants/keys/pc-api-7848104719403017742-541-372b331600fb.json",
+        "track": "internal"
+      },
       "ios": {
         "appleId": "vietbinhkhctk13@gmail.com",
         "ascAppId": "1602960575",

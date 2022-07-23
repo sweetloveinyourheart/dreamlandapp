@@ -1,6 +1,6 @@
 import { useQuery } from "@apollo/client";
 import { Fragment, FunctionComponent, useCallback, useEffect, useState } from "react";
-import { RefreshControl, SafeAreaView, ScrollView } from "react-native";
+import { Platform, RefreshControl, SafeAreaView, ScrollView, StatusBar } from "react-native";
 import Banner from "../components/banner/banner";
 import HomeCategory from "../components/categories/home-category";
 import Header from "../components/headers/header";
@@ -63,7 +63,10 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = () => {
     return (
         <Fragment>
             <SafeAreaView style={{ flex: 0, backgroundColor: '#ffb41f' }} />
-            <SafeAreaView style={{ flex: 1 }}>
+            <SafeAreaView style={{
+                flex: 1,
+                paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0
+            }}>
                 <Header />
                 <ScrollView
                     refreshControl={

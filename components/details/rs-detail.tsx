@@ -103,7 +103,7 @@ const RSDetail: FunctionComponent<RSDetailProps> = ({ data, type }) => {
                         <Text
                             numberOfLines={2}
                             ellipsizeMode='tail'
-                            style={{ color: "green", fontWeight: '500' }}
+                            style={{ color: data.googleMapsLink ? "green" : "#777", fontWeight: '500' }}
                         >
                             {data.detail.address?.houseNumber} {data.detail.address?.street} - {data.detail.address?.ward} - {data.detail.address?.district} - {data.detail.address?.province}
                         </Text>

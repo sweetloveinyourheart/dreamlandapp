@@ -1,6 +1,6 @@
 import { useQuery } from "@apollo/client";
 import { Fragment, FunctionComponent, useCallback, useEffect, useState } from "react";
-import { SafeAreaView, ScrollView } from "react-native";
+import { Platform, SafeAreaView, ScrollView, StatusBar } from "react-native";
 import TransactionHeader from "../components/headers/transaction-header";
 import TransactionItems from "../components/items/transaction-item";
 import TransactionMenu from "../components/menu/transaction-menu";
@@ -40,7 +40,10 @@ const TransactionScreen: FunctionComponent<TransactionScreenProps> = () => {
     return (
         <Fragment>
             <SafeAreaView style={{ flex: 0, backgroundColor: '#ffb41f' }} />
-            <SafeAreaView style={{ flex: 1 }}>
+            <SafeAreaView style={{
+                flex: 1,
+                paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0
+            }}>
                 <TransactionHeader onReload={() => reload()}/>
                 <TransactionMenu onChangeMenu={onSelectMenu} status={status} />
                 <TransactionItems items={transactions}/>

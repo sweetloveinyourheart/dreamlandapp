@@ -1,11 +1,13 @@
 import { useQuery } from "@apollo/client";
 import { Fragment, useCallback, useEffect, useState } from "react";
-import { SafeAreaView, ScrollView, View } from "react-native";
+import { Platform, SafeAreaView, ScrollView, StatusBar, View } from "react-native";
 import ProjectFilter from "../components/filters/pj-filter";
 import PJBrowseHeader from "../components/headers/pj-browse-header";
 import { ProjectItems } from "../components/items/project-items";
 import { GetProjectsData, GetProjectsVars, GET_PROJECT_POSTS, ProjectFilterInterface } from "../graphql/queries/pj-list";
 import { ProjectInterface } from "../types/interfaces/project";
+import { PaginationFilter } from "../types/interfaces/realEstate";
+import { isCloseToBottom } from "./rs-screen";
 
 function ProjectsScreen() {
     const [filter, setFilter] = useState<ProjectFilterInterface>()
@@ -37,7 +39,10 @@ function ProjectsScreen() {
     return (
         <Fragment>
             <SafeAreaView style={{ flex: 0, backgroundColor: '#ffb41f' }} />
-            <SafeAreaView style={{ flex: 1 }}>
+            <SafeAreaView style={{
+                flex: 1,
+                paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0
+            }}>
                 <PJBrowseHeader onSearch={onSearch} />
                 <ProjectFilter 
                     initialFilter={filter} 

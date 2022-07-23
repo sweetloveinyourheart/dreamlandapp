@@ -137,25 +137,25 @@ const Item = ({ transaction }: { transaction: TransactionInterface }) => {
                     />
                     <Text style={styles.owner}><Ant name="user" size={13} /> {post.owner.user.name}</Text>
                 </View>
-                <View style={{flexDirection: 'row'}}>
+                <View style={{ flexDirection: 'row' }}>
                     {transaction.status === TransactionStatus.Locked
                         && (
-                            <View style={[styles.status, { backgroundColor: "orange" }]}><Text style={{fontSize: 12, color: "#fff"}}>Đã khoá</Text></View>
+                            <View style={[styles.status, { backgroundColor: "orange" }]}><Text style={{ fontSize: 12, color: "#fff" }}>Đã khoá</Text></View>
                         )
                     }
                     {transaction.status === TransactionStatus.DatCoc
                         && (
-                            <View style={[styles.status, { backgroundColor: "#14a7fa" }]}><Text style={{fontSize: 12, color: "#fff"}}>Đã đặt cọc</Text></View>
+                            <View style={[styles.status, { backgroundColor: "#14a7fa" }]}><Text style={{ fontSize: 12, color: "#fff" }}>Đã đặt cọc</Text></View>
                         )
                     }
                     {transaction.status === TransactionStatus.BanGiao
                         && (
-                            <View style={[styles.status, { backgroundColor: "green" }]}><Text style={{fontSize: 12, color: "#fff"}}>Đã bàn giao</Text></View>
+                            <View style={[styles.status, { backgroundColor: "green" }]}><Text style={{ fontSize: 12, color: "#fff" }}>Đã bàn giao</Text></View>
                         )
                     }
                     {transaction.status === TransactionStatus.Rejected
                         && (
-                            <View style={[styles.status, { backgroundColor: "#f30606" }]}><Text style={{fontSize: 12, color: "#fff"}}>Đã huỷ bỏ</Text></View>
+                            <View style={[styles.status, { backgroundColor: "#f30606" }]}><Text style={{ fontSize: 12, color: "#fff" }}>Đã huỷ bỏ</Text></View>
                         )
                     }
                 </View>
@@ -172,6 +172,14 @@ const TransactionItems: FunctionComponent<TransactionItemsProps> = ({ items }) =
         })
     }
 
+    if (items.length === 0) {
+        return (
+            <View style={styles.noInfo}>
+                <Text style={styles.noInfoTxt}>Chưa có dữ liệu giao dịch</Text>
+            </View>
+        )
+    }
+
     return (
         <ScrollView style={styles.container}>
             {renderItems()}
@@ -183,6 +191,13 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: "#fff",
         padding: 12
+    },
+    noInfo: {
+        flex: 1,
+        justifyContent: 'center'
+    },
+    noInfoTxt: {
+        textAlign: 'center'
     },
     item: {
         flexDirection: 'row',

@@ -54,7 +54,7 @@ export const GET_APARTMENT_POST_BY_DIRECT_LINK = gql`
             index
             googleMapsLink
             virtual3DLink
-
+            postStatus
         }
     }
 `
@@ -110,6 +110,7 @@ export const GET_HOUSE_POST_BY_DIRECT_LINK = gql`
             index
             googleMapsLink
             virtual3DLink
+            postStatus
         }
     }
 `
@@ -166,6 +167,7 @@ export const GET_LAND_POST_BY_DIRECT_LINK = gql`
             index
             googleMapsLink
             virtual3DLink
+            postStatus
         }
     }
 `
@@ -217,6 +219,7 @@ export const GET_BUSINESS_PREMISES_POST_BY_DIRECT_LINK = gql`
             index
             googleMapsLink
             virtual3DLink
+            postStatus
         }
     }
 `
@@ -265,6 +268,7 @@ export const GET_MOTAL_POST_BY_DIRECT_LINK = gql`
             index
             googleMapsLink
             virtual3DLink
+            postStatus
         }
     }
 `

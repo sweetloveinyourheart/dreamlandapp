@@ -1,6 +1,6 @@
 import { useQuery } from "@apollo/client";
 import { Fragment, useEffect, useState } from "react";
-import { SafeAreaView, ScrollView } from "react-native";
+import { Platform, SafeAreaView, ScrollView, StatusBar } from "react-native";
 import ImageCarousel from "../components/carousel/img-carousel";
 import ProjectDetail from "../components/details/pj-detail";
 import ProjectPostFooter from "../components/footer/pj-post-footer";
@@ -31,7 +31,10 @@ function ProjectScreen({ route }: any) {
     return (
         <Fragment>
             <SafeAreaView style={{ flex: 0, backgroundColor: '#ffb41f' }} />
-            <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
+            <SafeAreaView style={{
+                flex: 1,
+                paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0
+            }}>
                 <ProjectHeader />
                 <ScrollView style={{ flex: 1 }}>
                     <ImageCarousel images={project.media.images}/>

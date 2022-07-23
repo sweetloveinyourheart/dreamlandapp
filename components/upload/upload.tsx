@@ -313,7 +313,7 @@ const UploadPost: FunctionComponent<UploadPostProps> = () => {
             active: true,
             isUploading: true
         }))
-        const imagePresets = await onUploadImage()        
+        const imagePresets = await onUploadImage()
 
         if (imagePresets) {
             activeMutation(imagePresets)
@@ -324,6 +324,7 @@ const UploadPost: FunctionComponent<UploadPostProps> = () => {
     const onSelectType = useCallback((type: RealEstateType) => {
         setPost(initialState)
         setPostType(type)
+        setImages([])
     }, [])
 
     const onPressResult = useCallback(() => {
@@ -367,8 +368,8 @@ const UploadPost: FunctionComponent<UploadPostProps> = () => {
                                 style={{
                                     viewContainer: {
                                         borderWidth: 1,
-                                        paddingVertical: 12,
-                                        paddingHorizontal: 20,
+                                        paddingVertical: Platform.OS === "android" ? 0 : 12,
+                                        paddingHorizontal: Platform.OS === "android" ? 8 : 20,
                                         borderRadius: 8,
                                         borderColor: "#dcdcdc"
                                     }
@@ -390,7 +391,16 @@ const UploadPost: FunctionComponent<UploadPostProps> = () => {
                                 <Text style={styles.itemTitle}>Danh mục bất động sản</Text>
                                 <View style={styles.uploadContent}>
                                     <View style={styles.categories}>
-                                        {postType !== RealEstateType.PhongTro}
+                                        {postType !== RealEstateType.PhongTro
+                                            && (
+                                                <Pressable
+                                                    style={[styles.category, { backgroundColor: post.category === RealEstateCategory.MuaBan ? "#f93707" : "#eee" }]}
+                                                    onPress={() => setPost(s => ({ ...s, category: RealEstateCategory.MuaBan }))}
+                                                >
+                                                    <Text style={{ color: post.category === RealEstateCategory.MuaBan ? "#fff" : "#222" }}>Mua bán</Text>
+                                                </Pressable>
+                                            )
+                                        }
                                         <Pressable
                                             style={[styles.category, { backgroundColor: post.category === RealEstateCategory.ChoThue ? "#f93707" : "#eee" }]}
                                             onPress={() => setPost(s => ({ ...s, category: RealEstateCategory.ChoThue }))}
@@ -477,8 +487,8 @@ const UploadPost: FunctionComponent<UploadPostProps> = () => {
                                                         style={{
                                                             viewContainer: {
                                                                 borderWidth: 1,
-                                                                paddingVertical: 12,
-                                                                paddingHorizontal: 20,
+                                                                paddingVertical: Platform.OS === "android" ? 0 : 12,
+                                                                paddingHorizontal: Platform.OS === "android" ? 8 : 20,
                                                                 borderRadius: 8,
                                                                 borderColor: "#dcdcdc"
                                                             }
@@ -557,8 +567,8 @@ const UploadPost: FunctionComponent<UploadPostProps> = () => {
                                                         style={{
                                                             viewContainer: {
                                                                 borderWidth: 1,
-                                                                paddingVertical: 12,
-                                                                paddingHorizontal: 20,
+                                                                paddingVertical: Platform.OS === "android" ? 0 : 12,
+                                                                paddingHorizontal: Platform.OS === "android" ? 8 : 20,
                                                                 borderRadius: 8,
                                                                 borderColor: (!post.overview?.type) ? "#fc7777" : "#dcdcdc"
                                                             }
@@ -621,8 +631,8 @@ const UploadPost: FunctionComponent<UploadPostProps> = () => {
                                                 style={{
                                                     viewContainer: {
                                                         borderWidth: 1,
-                                                        paddingVertical: 12,
-                                                        paddingHorizontal: 20,
+                                                        paddingVertical: Platform.OS === "android" ? 0 : 12,
+                                                        paddingHorizontal: Platform.OS === "android" ? 8 : 20,
                                                         borderRadius: 8,
                                                         borderColor: "#dcdcdc"
                                                     }
@@ -652,8 +662,8 @@ const UploadPost: FunctionComponent<UploadPostProps> = () => {
                                                         style={{
                                                             viewContainer: {
                                                                 borderWidth: 1,
-                                                                paddingVertical: 12,
-                                                                paddingHorizontal: 20,
+                                                                paddingVertical: Platform.OS === "android" ? 0 : 12,
+                                                                paddingHorizontal: Platform.OS === "android" ? 8 : 20,
                                                                 borderRadius: 8,
                                                                 borderColor: "#dcdcdc"
                                                             }
@@ -685,8 +695,8 @@ const UploadPost: FunctionComponent<UploadPostProps> = () => {
                                                         style={{
                                                             viewContainer: {
                                                                 borderWidth: 1,
-                                                                paddingVertical: 12,
-                                                                paddingHorizontal: 20,
+                                                                paddingVertical: Platform.OS === "android" ? 0 : 12,
+                                                                paddingHorizontal: Platform.OS === "android" ? 8 : 20,
                                                                 borderRadius: 8,
                                                                 borderColor: "#dcdcdc"
                                                             }
@@ -712,8 +722,8 @@ const UploadPost: FunctionComponent<UploadPostProps> = () => {
                                                         style={{
                                                             viewContainer: {
                                                                 borderWidth: 1,
-                                                                paddingVertical: 12,
-                                                                paddingHorizontal: 20,
+                                                                paddingVertical: Platform.OS === "android" ? 0 : 12,
+                                                                paddingHorizontal: Platform.OS === "android" ? 8 : 20,
                                                                 borderRadius: 8,
                                                                 borderColor: "#dcdcdc"
                                                             }
@@ -739,8 +749,8 @@ const UploadPost: FunctionComponent<UploadPostProps> = () => {
                                                 style={{
                                                     viewContainer: {
                                                         borderWidth: 1,
-                                                        paddingVertical: 12,
-                                                        paddingHorizontal: 20,
+                                                        paddingVertical: Platform.OS === "android" ? 0 : 12,
+                                                        paddingHorizontal: Platform.OS === "android" ? 8 : 20,
                                                         borderRadius: 8,
                                                         borderColor: "#dcdcdc"
                                                     }
@@ -765,8 +775,8 @@ const UploadPost: FunctionComponent<UploadPostProps> = () => {
                                                         style={{
                                                             viewContainer: {
                                                                 borderWidth: 1,
-                                                                paddingVertical: 12,
-                                                                paddingHorizontal: 20,
+                                                                paddingVertical: Platform.OS === "android" ? 0 : 12,
+                                                                paddingHorizontal: Platform.OS === "android" ? 8 : 20,
                                                                 borderRadius: 8,
                                                                 borderColor: "#dcdcdc"
                                                             }
@@ -792,8 +802,8 @@ const UploadPost: FunctionComponent<UploadPostProps> = () => {
                                                         style={{
                                                             viewContainer: {
                                                                 borderWidth: 1,
-                                                                paddingVertical: 12,
-                                                                paddingHorizontal: 20,
+                                                                paddingVertical: Platform.OS === "android" ? 0 : 12,
+                                                                paddingHorizontal: Platform.OS === "android" ? 8 : 20,
                                                                 borderRadius: 8,
                                                                 borderColor: "#dcdcdc"
                                                             }
@@ -819,8 +829,8 @@ const UploadPost: FunctionComponent<UploadPostProps> = () => {
                                                         style={{
                                                             viewContainer: {
                                                                 borderWidth: 1,
-                                                                paddingVertical: 12,
-                                                                paddingHorizontal: 20,
+                                                                paddingVertical: Platform.OS === "android" ? 0 : 12,
+                                                                paddingHorizontal: Platform.OS === "android" ? 8 : 20,
                                                                 borderRadius: 8,
                                                                 borderColor: "#dcdcdc"
                                                             }
@@ -912,8 +922,8 @@ const UploadPost: FunctionComponent<UploadPostProps> = () => {
                                                 style={{
                                                     viewContainer: {
                                                         borderWidth: 1,
-                                                        paddingVertical: 12,
-                                                        paddingHorizontal: 20,
+                                                        paddingVertical: Platform.OS === "android" ? 0 : 12,
+                                                        paddingHorizontal: Platform.OS === "android" ? 8 : 20,
                                                         borderRadius: 8,
                                                         borderColor: !post.owner.type ? "#fc7777" : "#dcdcdc",
                                                     }

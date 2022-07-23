@@ -1,6 +1,6 @@
 import { useLazyQuery, useQuery } from "@apollo/client";
 import { Fragment, useEffect, useState } from "react";
-import { ActivityIndicator, SafeAreaView, ScrollView } from "react-native";
+import { ActivityIndicator, Platform, SafeAreaView, ScrollView, StatusBar } from "react-native";
 import ImageCarousel from "../components/carousel/img-carousel";
 import RSDetail from "../components/details/rs-detail";
 import RSPostFooter from "../components/footer/rs-post-footer";
@@ -16,11 +16,11 @@ import {
 function RSPostScreen({ route }: { route: any }) {
     const [data, setData] = useState<any>()
 
-    const [apartmentQuery, { data: apartmentData }] = useLazyQuery(GET_APARTMENT_POST_BY_DIRECT_LINK)
-    const [houseQuery, { data: houseData }] = useLazyQuery(GET_HOUSE_POST_BY_DIRECT_LINK)
-    const [landQuery, { data: landData }] = useLazyQuery(GET_LAND_POST_BY_DIRECT_LINK)
-    const [businessPremisesQuery, { data: businessPremisesData }] = useLazyQuery(GET_BUSINESS_PREMISES_POST_BY_DIRECT_LINK)
-    const [motalQuery, { data: motalData }] = useLazyQuery(GET_MOTAL_POST_BY_DIRECT_LINK)
+    const [apartmentQuery, { data: apartmentData }] = useLazyQuery(GET_APARTMENT_POST_BY_DIRECT_LINK, { fetchPolicy: 'no-cache' })
+    const [houseQuery, { data: houseData }] = useLazyQuery(GET_HOUSE_POST_BY_DIRECT_LINK, { fetchPolicy: 'no-cache' })
+    const [landQuery, { data: landData }] = useLazyQuery(GET_LAND_POST_BY_DIRECT_LINK, { fetchPolicy: 'no-cache' })
+    const [businessPremisesQuery, { data: businessPremisesData }] = useLazyQuery(GET_BUSINESS_PREMISES_POST_BY_DIRECT_LINK, { fetchPolicy: 'no-cache' })
+    const [motalQuery, { data: motalData }] = useLazyQuery(GET_MOTAL_POST_BY_DIRECT_LINK, { fetchPolicy: 'no-cache' })
 
     useEffect(() => {
         const { directLink, type } = route.params
@@ -105,7 +105,10 @@ function RSPostScreen({ route }: { route: any }) {
     return (
         <Fragment>
             <SafeAreaView style={{ flex: 0, backgroundColor: '#ffb41f' }} />
-            <SafeAreaView style={{ flex: 1 }}>
+            <SafeAreaView style={{
+                flex: 1,
+                paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0
+            }}>
                 <PostHeader />
                 <ScrollView style={{ flex: 1 }}>
                     <ImageCarousel images={data.media?.images ?? []} />

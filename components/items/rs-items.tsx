@@ -41,7 +41,7 @@ interface RealEstateItemsProps {
     category: RealEstateCategory
 }
 
-export const RealEstateItem: FunctionComponent<{ data: ItemDataDisplay[], display: 'horizontal' | 'vertical' | 'column', category: RealEstateCategory }> = ({ display, data, category }) => {
+export const RealEstateItem: FunctionComponent<{ data: ItemDataDisplay[], display: 'horizontal' | 'vertical' | 'column' }> = ({ display, data }) => {
     const navigation = useNavigation();
 
     const { storeItem } = useViewHistory()
@@ -103,7 +103,7 @@ export const RealEstateItem: FunctionComponent<{ data: ItemDataDisplay[], displa
                                 displayType={'text'}
                                 thousandSeparator={true}
                                 // @ts-ignore
-                                renderText={(value: any, props: any) => (<Text {...props}>{moneyConverter(value)}{category === RealEstateCategory.ChoThue ? "/tháng" : ""}</Text>)}
+                                renderText={(value: any, props: any) => (<Text {...props}>{moneyConverter(value)}{item.category === RealEstateCategory.ChoThue ? "/tháng" : ""}</Text>)}
                             />
                         </Text>
                         <View style={[styles.info, { marginTop: display === 'vertical' ? 16 : 8 }]}>
@@ -141,7 +141,15 @@ const RealEstateView: FunctionComponent<RealEstateItemsProps> = ({ data, loading
     return (
         <View style={styles.container}>
             <Text style={styles.title}>{title}</Text>
-            <RealEstateItem data={data} display='horizontal' category={category} />
+            {data.length === 0
+                ? (
+                    <View style={styles.noItems}>
+                        <Text style={styles.noItemsTxt}>Chưa có dữ liệu hiển thị</Text>
+                    </View>
+                )
+                : <RealEstateItem data={data} display='horizontal'  />
+            }
+            
             <View style={styles.moreArea}>
                 <Pressable
                     // @ts-ignore
@@ -213,6 +221,16 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: "#14a7fa",
         fontWeight: '500'
+    },
+    noItems: {
+        borderTopWidth: 1,
+        borderTopColor: "#dcdcdc",
+        height: 150,
+        justifyContent: 'center'
+    },
+    noItemsTxt: {
+        textAlign: 'center',
+        color: "#777"
     }
 })
 

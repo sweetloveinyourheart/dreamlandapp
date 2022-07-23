@@ -1,6 +1,6 @@
 import { useLazyQuery } from "@apollo/client";
 import { Fragment, useCallback, useEffect, useState } from "react";
-import { SafeAreaView, View } from "react-native";
+import { Platform, SafeAreaView, StatusBar, View } from "react-native";
 import SearchHeader from "../components/headers/search-header";
 import { RealEstateItem } from "../components/items/rs-items";
 import Search from "../components/search/search";
@@ -54,7 +54,10 @@ function SearchScreen({ route }: any) {
     return (
         <Fragment>
             <SafeAreaView style={{ flex: 0, backgroundColor: '#ffb41f' }} />
-            <SafeAreaView style={{ flex: 1 }}>
+            <SafeAreaView style={{
+                flex: 1,
+                paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0
+            }}>
                 <SearchHeader />
                 <View style={{ marginVertical: 8, paddingVertical: 0, backgroundColor: "#ffb41f", height: 48, paddingHorizontal: 12 }}>
                     <Search search={route.params?.search} category={route.params?.category} onSearch={onSearch} />

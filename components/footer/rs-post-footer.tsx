@@ -6,15 +6,22 @@ import { CreateTransactionData, CreateTransactionVars, CREATE_TRANSACTION } from
 import { Post } from "../upload/upload";
 import { showMessage } from "react-native-flash-message";
 import { typenameToEnum } from "../../libs/enumConverter";
+import { PostStatus } from "../../types/enums/realEstate";
 
 interface RSPostFooterProps {
-    data: Post & { _id: string }
+    data: Post & { _id: string, postStatus: PostStatus }
     type: string | undefined
 }
 
 const RSPostFooter: FunctionComponent<RSPostFooterProps> = ({ data, type }) => {
     const [newTransaction, { data: transactionData, error, loading }] = useMutation<CreateTransactionData, CreateTransactionVars>(CREATE_TRANSACTION)
     const [isRequested, setIsRequested] = useState(false)
+
+    useEffect(() => {
+        if(data.postStatus !== PostStatus.Available) {
+            setIsRequested(true)
+        }
+    }, [data])
 
     useEffect(() => {
         if(transactionData) {
@@ -59,7 +66,9 @@ const RSPostFooter: FunctionComponent<RSPostFooterProps> = ({ data, type }) => {
     return (
         <View style={styles.container}>
             <TouchableOpacity style={styles.action} onPress={pressCall}>
-                <Text>
+                <Text style={{
+                    color: "#222" 
+                }}>
                     <Ant
                         name="phone"
                         size={20}
@@ -69,7 +78,9 @@ const RSPostFooter: FunctionComponent<RSPostFooterProps> = ({ data, type }) => {
                 </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.action} onPress={() => onRequestTransaction()}>
-                <Text>
+                <Text style={{
+                    color: isRequested ? "#777" : "#222" 
+                }}>
                     <Ant
                         name="lock1"
                         size={20}
@@ -79,7 +90,9 @@ const RSPostFooter: FunctionComponent<RSPostFooterProps> = ({ data, type }) => {
                 </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.action} onPress={pressMessage}>
-                <Text>
+                <Text style={{
+                    color: "#222" 
+                }}>
                     <Ant
                         name="message1"
                         size={20}

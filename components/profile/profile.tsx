@@ -39,16 +39,16 @@ const Profile: FunctionComponent<ProfileProps> = ({ user }) => {
                 </View>
                 <View style={styles.infoItem}>
                     <Text style={styles.itemTitle}>Email</Text>
-                    <Text style={styles.itemValue}>{user?.email || "___"}</Text>
+                    <Text style={styles.itemValue}>{user?.email || "Chưa cập nhật"}</Text>
                 </View>
 
                 <View style={styles.infoItem}>
                     <Text style={styles.itemTitle}>Ngày sinh</Text>
-                    <Text style={styles.itemValue}>{user?.birthday ? (Moment(user?.birthday).format('DD/MM/yyyy')) : "___"}</Text>
+                    <Text style={styles.itemValue}>{user?.birthday ? (Moment(user?.birthday).format('DD/MM/yyyy')) : "Chưa cập nhật"}</Text>
                 </View>
                 <View style={styles.infoItem}>
                     <Text style={styles.itemTitle}>Giới tính</Text>
-                    <Text style={styles.itemValue}>{user?.sex || "___"}</Text>
+                    <Text style={styles.itemValue}>{user?.sex || "Chưa cập nhật"}</Text>
                 </View>
                 <View style={styles.infoItem}>
                     <Text style={styles.itemTitle}>Ngày tham gia</Text>
@@ -56,7 +56,7 @@ const Profile: FunctionComponent<ProfileProps> = ({ user }) => {
                 </View>
                 <View style={styles.infoItem}>
                     <Text style={styles.itemTitle}>Địa chỉ</Text>
-                    <Text style={styles.itemValue}>{user?.address || "___"}</Text>
+                    <Text style={styles.itemValue}>{user?.address || "Chưa cập nhật"}</Text>
                 </View>
             </View>
             
