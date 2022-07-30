@@ -26,9 +26,7 @@ export const GET_ALL_POSTS = gql`
                     address {
                         province
                     }
-                    project {
-                        projectName
-                    }
+                    
                 }
                 
                 overview {
@@ -55,9 +53,7 @@ export const GET_ALL_POSTS = gql`
                     address {
                         province
                     }
-                    project {
-                        projectName
-                    }
+                    
                 }
                 
                 overview {
@@ -85,9 +81,7 @@ export const GET_ALL_POSTS = gql`
                     address {
                         province
                     }
-                    project {
-                        projectName
-                    }
+                    
                 }
                 timeStamp
                 category
@@ -110,9 +104,7 @@ export const GET_ALL_POSTS = gql`
                     address {
                         province
                     }
-                    project {
-                        projectName
-                    }
+                    
                 }
                 timeStamp
                 category
@@ -161,7 +153,6 @@ export interface RsFilterInterface {
         min: number
         max?: number
     }
-    project?: string
     type?: ApartmentType | HouseType | LandType | BusinessPremisesType | string
     numberOfBedrooms?: number
     doorDirection?: Direction
@@ -204,9 +195,6 @@ export const GET_APARTMENT_POSTS = gql`
                 address {
                     province
                 }
-                project {
-                    projectName
-                }
             }
             
             overview {
@@ -244,9 +232,6 @@ export const GET_HOUSE_POSTS = gql`
                 }
                 address {
                     province
-                }
-                project {
-                    projectName
                 }
             }
             
@@ -287,9 +272,6 @@ export const GET_LAND_POSTS = gql`
                 address {
                     province
                 }
-                project {
-                    projectName
-                }
             }
             timeStamp
             category
@@ -325,9 +307,6 @@ export const GET_BUSINESS_PREMISES_POSTS = gql`
                 }
                 address {
                     province
-                }
-                project {
-                    projectName
                 }
             }
             timeStamp

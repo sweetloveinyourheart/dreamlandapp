@@ -10,7 +10,6 @@ import { ProjectInterface } from "./project"
 import { RealEstateFilter } from "./realEstate"
 
 interface LandAddress {
-    projectName?: string
     houseNumber?: string
     showHouseNumber?: boolean
     province: string
@@ -49,7 +48,6 @@ export interface LandInterface {
             total: number
             deposit?: number
         }
-        project?: ProjectInterface
     }
 
     overview: {
@@ -62,8 +60,8 @@ export interface LandInterface {
     }
 
     owner: {
-        type: OwnerType
-        user: any
+        name: string
+        phone: string
     }
 
     timeStamp: Date
@@ -76,7 +74,6 @@ export interface LandInterface {
 
 export type LandFilter = RealEstateFilter & {
     type?: LandType
-    project?: string
     doorDirection?: Direction
     legalDocuments?: LegalDocuments
     frontispiece?: boolean

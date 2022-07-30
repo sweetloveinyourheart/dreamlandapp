@@ -6,8 +6,8 @@ import { ProjectInterface } from "../../types/interfaces/project";
 import { Address, Position } from "../../types/interfaces/apartment";
 import AddressSelector from "./address/address-selector";
 import { apartmentTypeSpeaker, directionSpeaker, furnitureSpeaker, houseTypeSpeaker, landTypeSpeaker, legalDocumentsSpeaker, premisesTypeSpeaker, realEstateStatusSpeaker, userTypeSpeaker } from "../../libs/speaker";
-import ImageUpload, { UploadedImage } from "./image/image-upload";
-import { useMutation, useQuery } from "@apollo/client";
+import ImageUpload from "./image/image-upload";
+import { useMutation } from "@apollo/client";
 import { CREATE_APARTMENT_POST, CREATE_BUSINESS_PREMISES_POST, CREATE_HOUSE_POST, CREATE_LAND_POST, CREATE_MOTAL_POST } from "../../graphql/mutations/upload";
 import axios from 'axios'
 import { CloudName } from "../../constants/cloudinary";
@@ -15,7 +15,7 @@ import { failedImage, inProgressImage, successImage } from "../../constants/imag
 import { useLinkTo } from "@react-navigation/native";
 import UploadHeader from "../headers/upload-header";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { GetAllProjectPostData, GET_ALL_PROJECT_POSTS } from "../../graphql/queries/project";
+import { ImageResult } from "expo-image-manipulator";
 
 interface UploadPostProps { }
 
@@ -40,7 +40,6 @@ export interface Post {
             total?: number
             deposit?: number | null
         }
-        project?: ProjectInterface
     }
 
     overview?: {
@@ -58,13 +57,8 @@ export interface Post {
         carAlley?: boolean | null
     }
 
-    owner: {
-        type: OwnerType | undefined
-        user: any
-    }
-
-    virtual3DLink: string | null
-    googleMapsLink: string | null
+    virtual3DLink?: string | null
+    googleMapsLink?: string | null
 }
 
 const initialState: Post = {
@@ -81,23 +75,15 @@ const initialState: Post = {
         },
     },
     overview: {},
-    owner: {
-        type: undefined,
-        user: {
-            name: "",
-            phone: ""
-        }
-    },
     virtual3DLink: null,
     googleMapsLink: null
 }
 
 const UploadPost: FunctionComponent<UploadPostProps> = () => {
-    const [images, setImages] = useState<UploadedImage[]>([]);
+    const [images, setImages] = useState<ImageResult[]>([]);
     const [post, setPost] = useState<Post>(initialState)
     const [postType, setPostType] = useState<RealEstateType | undefined>()
 
-    const [projectItems, setProjectItems] = useState<{ label: string, value: string | undefined }[]>([])
     const [typeItems, setTypeItems] = useState<{ label: string, value: string }[]>([])
 
     const [result, setResult] = useState({
@@ -105,10 +91,6 @@ const UploadPost: FunctionComponent<UploadPostProps> = () => {
         active: false,
         message: '',
         status: 0
-    })
-
-    const { data: projectsData, error: projectsErr } = useQuery<GetAllProjectPostData>(GET_ALL_PROJECT_POSTS, {
-        notifyOnNetworkStatusChange: true
     })
 
     const [createApartment, { data: createApartmentData, error: createApartmentErr }] = useMutation(CREATE_APARTMENT_POST)
@@ -163,17 +145,6 @@ const UploadPost: FunctionComponent<UploadPostProps> = () => {
         }
     }, [postType])
 
-    useEffect(() => {
-        // Take projects list
-        if (projectsData) {
-            setProjectItems(projectsData.projects.map((project) => {
-                return {
-                    label: project.projectName,
-                    value: project._id
-                }
-            }))
-        }
-    }, [projectsErr, projectsData])
 
     useEffect(() => {
         // Handle mutation data
@@ -470,30 +441,6 @@ const UploadPost: FunctionComponent<UploadPostProps> = () => {
                                                         placeholder="Tầng số"
                                                         value={post.detail?.position?.floorNumber}
                                                         onChangeText={(text) => setPost(s => ({ ...s, detail: { ...s.detail, position: { ...s.detail?.position, floorNumber: text } } }))}
-                                                    />
-                                                </View>
-                                            )
-                                        }
-                                        {(postType !== RealEstateType.PhongTro)
-                                            && (
-                                                <View style={{ width: '100%', marginBottom: 12 }}>
-                                                    <RNPickerSelect
-                                                        value={post.detail?.project}
-                                                        onValueChange={(value) => setPost(s => ({ ...s, detail: { ...s.detail, project: value } }))}
-                                                        placeholder={{
-                                                            label: "Thuộc dự án ...",
-                                                            value: undefined
-                                                        }}
-                                                        style={{
-                                                            viewContainer: {
-                                                                borderWidth: 1,
-                                                                paddingVertical: Platform.OS === "android" ? 0 : 12,
-                                                                paddingHorizontal: Platform.OS === "android" ? 8 : 20,
-                                                                borderRadius: 8,
-                                                                borderColor: "#dcdcdc"
-                                                            }
-                                                        }}
-                                                        items={projectItems}
                                                     />
                                                 </View>
                                             )
@@ -884,54 +831,6 @@ const UploadPost: FunctionComponent<UploadPostProps> = () => {
                                                 placeholder="Link thực tế ảo 3D"
                                                 value={post.virtual3DLink || undefined}
                                                 onChangeText={(text) => setPost(s => ({ ...s, virtual3DLink: text }))}
-                                            />
-                                        </View>
-                                    </View>
-                                </View>
-                                <View style={styles.uploadItem}>
-                                    <Text style={styles.itemTitle}>Chủ sở hữu</Text>
-                                    <View style={[styles.uploadContent, { flexDirection: 'row', flexWrap: 'wrap' }]}>
-                                        <View style={{ width: '100%', marginBottom: 12 }}>
-                                            <TextInput
-                                                style={[styles.input, {
-                                                    borderColor: !post.owner.user.name ? "#fc7777" : "#dcdcdc",
-                                                }]}
-                                                placeholder="Tên chủ sở hữu*"
-                                                value={post.owner.user.name}
-                                                onChangeText={(text) => setPost(s => ({ ...s, owner: { ...s.owner, user: { ...s.owner.user, name: text } } }))}
-                                            />
-                                        </View>
-                                        <View style={{ width: '50%', paddingHorizontal: 3, marginBottom: 12 }}>
-                                            <TextInput
-                                                style={[styles.input, {
-                                                    borderColor: !post.owner.user.phone ? "#fc7777" : "#dcdcdc",
-                                                }]}
-                                                placeholder="Số điện thoại*"
-                                                value={post.owner.user.phone}
-                                                onChangeText={(text) => setPost(s => ({ ...s, owner: { ...s.owner, user: { ...s.owner.user, phone: text } } }))}
-                                            />
-                                        </View>
-                                        <View style={{ width: '50%', marginBottom: 12, paddingHorizontal: 3 }}>
-                                            <RNPickerSelect
-                                                value={post.owner.type}
-                                                onValueChange={(value) => setPost(s => ({ ...s, owner: { ...s.owner, type: value } }))}
-                                                placeholder={{
-                                                    label: "Cá nhân/Môi giới ...",
-                                                    value: undefined
-                                                }}
-                                                style={{
-                                                    viewContainer: {
-                                                        borderWidth: 1,
-                                                        paddingVertical: Platform.OS === "android" ? 0 : 12,
-                                                        paddingHorizontal: Platform.OS === "android" ? 8 : 20,
-                                                        borderRadius: 8,
-                                                        borderColor: !post.owner.type ? "#fc7777" : "#dcdcdc",
-                                                    }
-                                                }}
-                                                items={[
-                                                    { label: userTypeSpeaker("CaNhan"), value: "CaNhan" },
-                                                    { label: userTypeSpeaker("MoiGioi"), value: "MoiGioi" },
-                                                ]}
                                             />
                                         </View>
                                     </View>

@@ -15,7 +15,6 @@ export interface UserInterface {
 
 export interface Profile {
     phone: string
-    password: string
     email?: string
     name: string
     avatar?: string

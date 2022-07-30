@@ -48,9 +48,7 @@ export const GET_TOP_POSTS_QUERY = gql`
                     address {
                         province
                     }
-                    project {
-                        projectName
-                    }
+                    
                 }
                         
                 overview {
@@ -78,9 +76,7 @@ export const GET_TOP_POSTS_QUERY = gql`
                     address {
                         province
                     }
-                    project {
-                        projectName
-                    }
+                    
                 }
                     
                 overview {
@@ -108,9 +104,7 @@ export const GET_TOP_POSTS_QUERY = gql`
                     address {
                         province
                     }
-                    project {
-                        projectName
-                    }
+                    
                 }
                 
                 timeStamp
@@ -136,9 +130,7 @@ export const GET_TOP_POSTS_QUERY = gql`
                     address {
                         province
                     }
-                    project {
-                        projectName
-                    }
+                    
                 }
                         
                 overview {
@@ -166,9 +158,7 @@ export const GET_TOP_POSTS_QUERY = gql`
                     address {
                         province
                     }
-                    project {
-                        projectName
-                    }
+                    
                 }
                     
                 overview {
@@ -196,9 +186,7 @@ export const GET_TOP_POSTS_QUERY = gql`
                     address {
                         province
                     }
-                    project {
-                        projectName
-                    }
+                    
                 }
                 
                 timeStamp
@@ -285,9 +273,7 @@ export const GET_OUTSTANDING_POSTS = gql`
                     address {
                         province
                     }
-                    project {
-                        projectName
-                    }
+                    
                 }
                 
                 overview {
@@ -314,9 +300,7 @@ export const GET_OUTSTANDING_POSTS = gql`
                     address {
                         province
                     }
-                    project {
-                        projectName
-                    }
+                    
                 }
                 
                 overview {
@@ -343,9 +327,7 @@ export const GET_OUTSTANDING_POSTS = gql`
                     address {
                         province
                     }
-                    project {
-                        projectName
-                    }
+                    
                 }
                 
                 timeStamp
@@ -368,9 +350,7 @@ export const GET_OUTSTANDING_POSTS = gql`
                     address {
                         province
                     }
-                    project {
-                        projectName
-                    }
+                    
                 }
 
                 timeStamp

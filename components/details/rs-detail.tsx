@@ -11,10 +11,17 @@ import { apartmentTypeSpeaker, directionSpeaker, furnitureSpeaker, houseTypeSpea
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import AddressViewer from "./modal/address";
 import VirtualViewer from "./modal/virtual";
-import { RealEstateCategory } from "../../types/enums/realEstate";
+import { PostStatus, RealEstateCategory } from "../../types/enums/realEstate";
+
+export type PostDetail = Post & { 
+    timeStamp: Date, 
+    owner: { name: string, phone: string }, 
+    postStatus: PostStatus,
+    _id: string
+}
 
 interface RSDetailProps {
-    data: Post & { timeStamp: Date }
+    data: PostDetail
     type: string
 }
 
@@ -122,13 +129,12 @@ const RSDetail: FunctionComponent<RSDetailProps> = ({ data, type }) => {
                     />
                 </View>
                 <View>
-                    <Text style={styles.ownerName}>{data.owner.user.name}</Text>
-                    <Text>{userTypeSpeaker(data.owner.type ?? "")}</Text>
+                    <Text style={styles.ownerName}>{data.owner.name}</Text>
                 </View>
             </View>
             <View style={styles.information}>
                 {data.detail.acreage.totalAcreage
-                    && (
+                    ? (
                         <View style={styles.informationItem}>
                             <Image
                                 source={acreageIcon}
@@ -140,9 +146,10 @@ const RSDetail: FunctionComponent<RSDetailProps> = ({ data, type }) => {
                             <Text style={styles.informationTxt}>Diện tích: {data.detail.acreage.totalAcreage} m2</Text>
                         </View>
                     )
+                    : (<View></View>)
                 }
                 {data.detail.acreage.width
-                    && (
+                    ? (
                         <View style={styles.informationItem}>
                             <Image
                                 source={heightIcon}
@@ -154,9 +161,10 @@ const RSDetail: FunctionComponent<RSDetailProps> = ({ data, type }) => {
                             <Text style={styles.informationTxt}>Chiều dài: {data.detail.acreage.width} m2</Text>
                         </View>
                     )
+                    : (<View></View>)
                 }
                 {data.detail.acreage.height
-                    && (
+                    ? (
                         <View style={styles.informationItem}>
                             <Image
                                 source={widthIcon}
@@ -167,9 +175,11 @@ const RSDetail: FunctionComponent<RSDetailProps> = ({ data, type }) => {
                             />
                             <Text style={styles.informationTxt}>Chiều rộng: {data.detail.acreage.height} m2</Text>
                         </View>
-                    )}
+                    )
+                    : (<View></View>)
+                }
                 {data.overview?.doorDirection
-                    && (
+                    ? (
                         <View style={styles.informationItem}>
                             <Image
                                 source={directionIcon}
@@ -181,9 +191,10 @@ const RSDetail: FunctionComponent<RSDetailProps> = ({ data, type }) => {
                             <Text style={styles.informationTxt}>Hướng cửa chính: {directionSpeaker(data.overview.doorDirection)}</Text>
                         </View>
                     )
+                    : (<View></View>)
                 }
                 {data.overview?.balconyDirection
-                    && (
+                    ? (
                         <View style={styles.informationItem}>
                             <Image
                                 source={directionIcon}
@@ -194,9 +205,11 @@ const RSDetail: FunctionComponent<RSDetailProps> = ({ data, type }) => {
                             />
                             <Text style={styles.informationTxt}>Hướng ban công: {directionSpeaker(data.overview.balconyDirection)}</Text>
                         </View>
-                    )}
+                    )
+                    : (<View></View>)
+                }
                 {data.overview?.numberOfBathrooms
-                    && (
+                    ? (
                         <View style={styles.informationItem}>
                             <Image
                                 source={bathroomsIcon}
@@ -208,9 +221,10 @@ const RSDetail: FunctionComponent<RSDetailProps> = ({ data, type }) => {
                             <Text style={styles.informationTxt}>Số phòng vệ sinh: {data.overview?.numberOfBathrooms} phòng</Text>
                         </View>
                     )
+                    : (<View></View>)
                 }
                 {data.overview?.numberOfBedrooms
-                    && (
+                    ? (
                         <View style={styles.informationItem}>
                             <Image
                                 source={bedroomsIcon}
@@ -222,9 +236,10 @@ const RSDetail: FunctionComponent<RSDetailProps> = ({ data, type }) => {
                             <Text style={styles.informationTxt}>Số phòng ngủ: {data.overview.numberOfBedrooms} phòng</Text>
                         </View>
                     )
+                    : (<View></View>)
                 }
                 {data.overview?.numberOfFloors
-                    && (
+                    ? (
                         <View style={styles.informationItem}>
                             <Image
                                 source={floorIcon}
@@ -236,6 +251,7 @@ const RSDetail: FunctionComponent<RSDetailProps> = ({ data, type }) => {
                             <Text style={styles.informationTxt}>Số tầng: {data.overview?.numberOfFloors} tầng</Text>
                         </View>
                     )
+                    : (<View></View>)
                 }
                 <View style={styles.informationItem}>
                     <Image
@@ -248,7 +264,7 @@ const RSDetail: FunctionComponent<RSDetailProps> = ({ data, type }) => {
                     <Text style={styles.informationTxt}>Loại hình: {postType(data.overview?.type)}</Text>
                 </View>
                 {data.overview?.furniture
-                    && (
+                    ? (
                         <View style={styles.informationItem}>
                             <Image
                                 source={furnitureIcon}
@@ -260,30 +276,33 @@ const RSDetail: FunctionComponent<RSDetailProps> = ({ data, type }) => {
                             <Text style={styles.informationTxt}>Tình trạng nội thất: {furnitureSpeaker(data.overview?.furniture)}</Text>
                         </View>
                     )
+                    : (<View></View>)
                 }
             </View>
             <View style={styles.description}>
                 <Text>{data.description}</Text>
             </View>
 
-            {data.googleMapsLink
-                && (
+            {data.googleMapsLink 
+                ? (
                     <AddressViewer
                         uri={data.googleMapsLink}
                         active={addressModalActive}
                         onClose={onCloseAddressModal}
                     />
                 )
+                : (<View></View>)
             }
 
             {data.virtual3DLink
-                && (
+                ? (
                     <VirtualViewer
                         uri={data.virtual3DLink}
                         active={virtualModalActive}
                         onClose={onCloseVirtualModal}
                     />
                 )
+                : (<View></View>)
             }
         </View>
     );

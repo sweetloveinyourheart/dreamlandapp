@@ -1,4 +1,4 @@
-import { useLazyQuery } from "@apollo/client";
+import { useLazyQuery, useQuery } from "@apollo/client";
 import { FunctionComponent, useCallback, useEffect, useState } from "react";
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import NumberFormat from "react-number-format";
@@ -17,14 +17,16 @@ import Ant from 'react-native-vector-icons/AntDesign'
 import { TransactionStatus } from "../../types/enums/transaction";
 import { useNavigation } from "@react-navigation/native";
 import { enumToTypename } from "../../libs/enumConverter";
+import { GetProjectProductsByIdData, GET_PROJECT_PRODUCT_BY_ID } from "../../graphql/queries/project";
+import { ProjectProduct } from "../../types/interfaces/project";
 
 
 interface TransactionItemsProps {
     items: TransactionInterface[]
 }
 
-const Item = ({ transaction }: { transaction: TransactionInterface }) => {
-    const [post, setPost] = useState<Post & { directLink: string }>()
+const RealEstate = ({ realEstate, status }: { realEstate: { itemId: string, itemType: string }, status: TransactionStatus }) => {
+    const [post, setPost] = useState<Post & { directLink: string, owner: any }>()
 
     const [apartmentQuery, { data: apartmentData }] = useLazyQuery(GET_APARTMENT_BY_ID)
     const [houseQuery, { data: houseData }] = useLazyQuery(GET_HOUSE_BY_ID)
@@ -35,11 +37,11 @@ const Item = ({ transaction }: { transaction: TransactionInterface }) => {
     const navigation = useNavigation()
 
     useEffect(() => {
-        switch (transaction.item.itemType) {
+        switch (realEstate.itemType) {
             case "CanHo":
                 apartmentQuery({
                     variables: {
-                        id: transaction.item.itemId
+                        id: realEstate.itemId
                     }
                 })
                 return;
@@ -47,7 +49,7 @@ const Item = ({ transaction }: { transaction: TransactionInterface }) => {
             case "NhaO":
                 houseQuery({
                     variables: {
-                        id: transaction.item.itemId
+                        id: realEstate.itemId
                     }
                 })
                 return;
@@ -55,7 +57,7 @@ const Item = ({ transaction }: { transaction: TransactionInterface }) => {
             case "Dat":
                 landQuery({
                     variables: {
-                        id: transaction.item.itemId
+                        id: realEstate.itemId
                     }
                 })
                 return;
@@ -63,7 +65,7 @@ const Item = ({ transaction }: { transaction: TransactionInterface }) => {
             case "VanPhong":
                 premisesQuery({
                     variables: {
-                        id: transaction.item.itemId
+                        id: realEstate.itemId
                     }
                 })
                 return;
@@ -71,7 +73,7 @@ const Item = ({ transaction }: { transaction: TransactionInterface }) => {
             case "PhongTro":
                 motalQuery({
                     variables: {
-                        id: transaction.item.itemId
+                        id: realEstate.itemId
                     }
                 })
                 return;
@@ -79,26 +81,26 @@ const Item = ({ transaction }: { transaction: TransactionInterface }) => {
             default:
                 return;
         }
-    }, [transaction])
+    }, [realEstate])
 
     useEffect(() => {
-        if (apartmentData && transaction.item.itemType === "CanHo") {
+        if (apartmentData && realEstate.itemType === "CanHo") {
             setPost(apartmentData.apartment)
         }
 
-        if (houseData && transaction.item.itemType === "NhaO") {
+        if (houseData && realEstate.itemType === "NhaO") {
             setPost(houseData.house)
         }
 
-        if (landData && transaction.item.itemType === "Dat") {
+        if (landData && realEstate.itemType === "Dat") {
             setPost(landData.land)
         }
 
-        if (premisesData && transaction.item.itemType === "VanPhong") {
+        if (premisesData && realEstate.itemType === "VanPhong") {
             setPost(premisesData.businessPremises)
         }
 
-        if (motalData && transaction.item.itemType === "PhongTro") {
+        if (motalData && realEstate.itemType === "PhongTro") {
             setPost(motalData.motal)
         }
     }, [apartmentData, houseData, landData, premisesData, motalData])
@@ -109,11 +111,11 @@ const Item = ({ transaction }: { transaction: TransactionInterface }) => {
     }, [navigation])
 
     if (!post) {
-        return <SpinnerLoading height={60} />
+        return <SpinnerLoading height={90} />
     }
 
     return (
-        <TouchableOpacity style={styles.item} onPress={() => onViewPost(post.directLink, transaction.item.itemType)}>
+        <TouchableOpacity style={styles.item} onPress={() => onViewPost(post.directLink, realEstate.itemType)}>
             <View style={styles.image}>
                 <Image
                     source={{ uri: post?.media?.images[0] }}
@@ -135,25 +137,25 @@ const Item = ({ transaction }: { transaction: TransactionInterface }) => {
                         // @ts-ignore
                         renderText={(value: any, props: any) => (<Text style={styles.price} {...props}>{moneyConverter(value)}</Text>)}
                     />
-                    <Text style={styles.owner}><Ant name="user" size={13} /> {post.owner.user.name}</Text>
+                    <Text style={styles.owner}><Ant name="user" size={13} /> {post.owner.name}</Text>
                 </View>
                 <View style={{ flexDirection: 'row' }}>
-                    {transaction.status === TransactionStatus.Locked
+                    {status === TransactionStatus.Locked
                         && (
                             <View style={[styles.status, { backgroundColor: "orange" }]}><Text style={{ fontSize: 12, color: "#fff" }}>Đã khoá</Text></View>
                         )
                     }
-                    {transaction.status === TransactionStatus.DatCoc
+                    {status === TransactionStatus.DatCoc
                         && (
                             <View style={[styles.status, { backgroundColor: "#14a7fa" }]}><Text style={{ fontSize: 12, color: "#fff" }}>Đã đặt cọc</Text></View>
                         )
                     }
-                    {transaction.status === TransactionStatus.BanGiao
+                    {status === TransactionStatus.BanGiao
                         && (
                             <View style={[styles.status, { backgroundColor: "green" }]}><Text style={{ fontSize: 12, color: "#fff" }}>Đã bàn giao</Text></View>
                         )
                     }
-                    {transaction.status === TransactionStatus.Rejected
+                    {status === TransactionStatus.Rejected
                         && (
                             <View style={[styles.status, { backgroundColor: "#f30606" }]}><Text style={{ fontSize: 12, color: "#fff" }}>Đã huỷ bỏ</Text></View>
                         )
@@ -164,11 +166,83 @@ const Item = ({ transaction }: { transaction: TransactionInterface }) => {
     )
 }
 
+const Project = ({ project, status }: { project: { itemId: string }, status: TransactionStatus }) => {
+    const [product, setProduct] = useState<ProjectProduct | undefined>()
+
+    const { data } = useQuery<GetProjectProductsByIdData>(GET_PROJECT_PRODUCT_BY_ID, {
+        variables: {
+            id: project.itemId
+        }
+    })
+
+    useEffect(() => {
+        if (data) {
+            setProduct(data.product)
+        }
+    }, [data])
+
+    if (!product) {
+        return <SpinnerLoading height={90} />
+    }
+
+    return (
+        <View style={styles.item}>
+            <View style={styles.image}>
+                <View style={styles.imageTxtContainer}>
+                    <Text style={styles.imageTxt}>{product.code}</Text>
+                </View>
+            </View>
+            <View style={styles.description}>
+                <View>
+                    <Text style={styles.title} numberOfLines={2} ellipsizeMode="tail">{"Sản phẩm dự án"}</Text>
+                    <NumberFormat
+                        value={product.price}
+                        displayType={'text'}
+                        thousandSeparator={true}
+                        // @ts-ignore
+                        renderText={(value: any, props: any) => (<Text style={styles.price} {...props}>{moneyConverter(value)}</Text>)}
+                    />
+                    <Text style={styles.owner}><Ant name="infocirlceo" size={12} /> Diện tích: {product.totalAcreage}m²</Text>
+                    <Text style={styles.owner}><Ant name="infocirlceo" size={12} /> Thổ cư: {product.usedAcreage}m²</Text>
+                </View>
+                <View style={{ flexDirection: 'row' }}>
+                    {status === TransactionStatus.Locked
+                        && (
+                            <View style={[styles.status, { backgroundColor: "orange" }]}><Text style={{ fontSize: 12, color: "#fff" }}>Đã khoá</Text></View>
+                        )
+                    }
+                    {status === TransactionStatus.DatCoc
+                        && (
+                            <View style={[styles.status, { backgroundColor: "#14a7fa" }]}><Text style={{ fontSize: 12, color: "#fff" }}>Đã đặt cọc</Text></View>
+                        )
+                    }
+                    {status === TransactionStatus.BanGiao
+                        && (
+                            <View style={[styles.status, { backgroundColor: "green" }]}><Text style={{ fontSize: 12, color: "#fff" }}>Đã bàn giao</Text></View>
+                        )
+                    }
+                    {status === TransactionStatus.Rejected
+                        && (
+                            <View style={[styles.status, { backgroundColor: "#f30606" }]}><Text style={{ fontSize: 12, color: "#fff" }}>Đã huỷ bỏ</Text></View>
+                        )
+                    }
+                </View>
+            </View>
+        </View>
+    )
+}
+
 const TransactionItems: FunctionComponent<TransactionItemsProps> = ({ items }) => {
 
     const renderItems = () => {
         return items.map((item, index) => {
-            return <Item transaction={item} key={index} />
+            if (item.realEstate)
+                return <RealEstate realEstate={item.realEstate} status={item.status} key={index} />
+
+            if (item.project)
+                return <Project project={item.project} status={item.status} key={index} />;
+
+            return;
         })
     }
 
@@ -208,6 +282,17 @@ const styles = StyleSheet.create({
         width: 120,
         height: 90,
         backgroundColor: "#eee"
+    },
+    imageTxtContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1
+    },
+    imageTxt: {
+        textAlign: 'center',
+        fontWeight: '600',
+        fontSize: 18,
+        color: "#f30606"
     },
     description: {
         flex: 1,

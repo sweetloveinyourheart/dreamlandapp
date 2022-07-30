@@ -10,7 +10,6 @@ export interface AddressInterface {
 }
 
 export interface AddressFilter {
-    projectName?: string
     houseNumber?: string
     showHouseNumber?: boolean
     province?: string

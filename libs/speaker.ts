@@ -210,3 +210,19 @@ export function projectUtilitiesTranslate(type: ProjectUtilities): string {
             return "Khác"
     }
 }
+
+export function productStatusReader(type: any) {
+    switch (type) {
+        case "Available":
+            return "Sẵn sàng"
+        case "DatCoc":
+            return "Đặt cọc"
+        case "BanGiao":
+            return "Bàn giao"
+        case "Lock":
+            return "Đã khoá GD"
+
+        default:
+            return ""
+    }
+}

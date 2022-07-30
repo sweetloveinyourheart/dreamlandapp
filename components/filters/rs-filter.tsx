@@ -10,7 +10,6 @@ import PriceFilter from "./items/price";
 import { RsFilterInterface } from "../../graphql/queries/rs-list";
 import { Direction, RealEstateCategory, RealEstateType } from "../../types/enums/realEstate";
 import { categorySpeaker, realEstateTypeSpeaker } from "../../libs/speaker";
-import ProjectListFilter from "./items/project";
 import AcreageFilter from "./items/acreage";
 import { BalconyDirectionFilter, DoorDirectionFilter } from "./items/direction";
 import BedroomsFilter from "./items/rooms";
@@ -29,7 +28,6 @@ enum FilterEnum {
     Type = 1,
     Category,
     Price,
-    Project,
     Address,
     Acreage,
     BalconyDirection,
@@ -143,8 +141,6 @@ const RealEstateFilter: FunctionComponent<RealEstateFilterProps> = ({ display, o
                     return <AddressFilter onSelected={onActiveAddressFilter} onCloseSelector={onCloseSelector} require={false} />
                 case FilterEnum.Price:
                     return <PriceFilter price={filter.price} onSelect={onActivePriceFilter} onCloseSelector={onCloseSelector} />
-                case FilterEnum.Project:
-                    return <ProjectListFilter onSelect={onActiveProjectFilter} onCloseSelector={onCloseSelector} />
                 case FilterEnum.Acreage:
                     return <AcreageFilter onCloseSelector={onCloseSelector} acreage={filter.acreage} onSelect={onActiveAcreageFilter} />
                 case FilterEnum.BalconyDirection:
@@ -217,24 +213,6 @@ const RealEstateFilter: FunctionComponent<RealEstateFilterProps> = ({ display, o
                     <Text>Giá </Text>
                     <Feather name={filter.price ? "check" : "plus"} size={16} />
                 </TouchableOpacity>
-                {type !== RealEstateType.PhongTro
-                    && (
-                        <TouchableOpacity
-                            style={[
-                                styles.item,
-                                {
-                                    borderColor: filter.project !== undefined ? "#222" : "#fff",
-                                    backgroundColor: filter.project !== undefined ? "#fff" : "#eee"
-                                }
-                            ]}
-                            onPress={() => onSelectFilter(FilterEnum.Project)}
-                        >
-                            <Text>Dự án </Text>
-                            <Feather name={filter.project ? "check" : "plus"} size={16} />
-                        </TouchableOpacity>
-                    )
-                }
-
                 {type !== undefined
                     && (
                         <TouchableOpacity

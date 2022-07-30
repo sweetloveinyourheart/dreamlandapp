@@ -1,6 +1,5 @@
 import { gql } from '@apollo/client'
-import { ProjectInterface } from '../../types/interfaces/project'
-import { AddressFilter, PaginationFilter } from '../../types/interfaces/realEstate'
+import { ProjectInterface, ProjectProduct } from '../../types/interfaces/project'
 
 export const GET_PROJECT_BY_DIRECT_LINK = gql`
     query project($link: String!) {
@@ -100,4 +99,40 @@ export const GET_ALL_PROJECT_POSTS = gql`
 `
 export interface GetAllProjectPostData {
     projects: ProjectInterface[]
+}
+
+export const GET_PROJECT_PRODUCT = gql`
+    query Product($project: String!) {
+        products: getProjectProducts(project: $project) {
+            _id
+            code
+            totalAcreage
+            quantity
+            price
+            usedAcreage
+            description
+            status
+        }
+    }
+`
+export interface GetProjectProductsData {
+    products: ProjectProduct[]
+}
+
+export const GET_PROJECT_PRODUCT_BY_ID = gql`
+    query Product($id: String!) {
+        product: getProjectProductById(id: $id) {
+            _id
+            code
+            totalAcreage
+            quantity
+            price
+            usedAcreage
+            description
+            status
+        }
+    }
+`
+export interface GetProjectProductsByIdData {
+    product: ProjectProduct
 }

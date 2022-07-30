@@ -18,6 +18,8 @@ import { REFRESH_TOKEN } from "./graphql/queries/auth";
 import ViewHistoryProvider from "./contexts/view-history";
 import FlashMessage from "react-native-flash-message";
 import SearchScreen from "./screens/search-screen";
+import { NotificationProvider } from "./contexts/notification";
+import UploadedInfoScreen from "./screens/uploaded-info-screen";
 
 let client: ApolloClient<any>
 
@@ -92,20 +94,23 @@ export default function App() {
   return (
     <NavigationContainer>
       <ApolloProvider client={client}>
-        <AuthProvider>
-          <ViewHistoryProvider>
-            <AddressProvider>
-              <Stack.Navigator screenOptions={{ headerShown: false }}>
-                <Stack.Screen name='screen' component={Tabs} />
-                <Stack.Screen name='post-screen' component={RSPostScreen} />
-                <Stack.Screen name='project-screen' component={ProjectScreen} />
-                <Stack.Screen name='upload-screen' component={UploadScreen} />
-                <Stack.Screen name='search-screen' component={SearchScreen} />
-              </Stack.Navigator>
-              <FlashMessage position="center" />
-            </AddressProvider>
-          </ViewHistoryProvider>
-        </AuthProvider>
+        <NotificationProvider>
+          <AuthProvider>
+            <ViewHistoryProvider>
+              <AddressProvider>
+                <Stack.Navigator screenOptions={{ headerShown: false }}>
+                  <Stack.Screen name='screen' component={Tabs} />
+                  <Stack.Screen name='post-screen' component={RSPostScreen} />
+                  <Stack.Screen name='project-screen' component={ProjectScreen} />
+                  <Stack.Screen name='upload-screen' component={UploadScreen} />
+                  <Stack.Screen name='uploaded-screen' component={UploadedInfoScreen} />
+                  <Stack.Screen name='search-screen' component={SearchScreen} />
+                </Stack.Navigator>
+                <FlashMessage position="center" />
+              </AddressProvider>
+            </ViewHistoryProvider>
+          </AuthProvider>
+        </NotificationProvider>
       </ApolloProvider>
     </NavigationContainer>
   );

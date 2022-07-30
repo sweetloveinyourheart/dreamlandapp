@@ -5,9 +5,12 @@ import { TransactionInterface } from "../../types/interfaces/transaction";
 export const GET_TRANSACTIONS = gql`
     query Transaction($status: TransactionStatus!) {
         transactions: getUserTransaction(status: $status) {
-            item {
+            realEstate {
                 itemId
                 itemType
+            }
+            project {
+                itemId
             }
             status
             createdAt
@@ -40,11 +43,8 @@ export const GET_APARTMENT_BY_ID = gql`
             }
             
             owner {
-                type
-                user {
-                    phone
-                    name
-                }
+                phone
+                name
             }
         
             directLink
@@ -74,11 +74,8 @@ export const GET_HOUSE_BY_ID = gql`
             }
             
             owner {
-                type
-                user {
-                    phone
-                    name
-                }
+                phone
+                name
             }
         
             directLink
@@ -108,11 +105,8 @@ export const GET_LAND_BY_ID = gql`
             }
             
             owner {
-                type
-                user {
-                    phone
-                    name
-                }
+                phone
+                name
             }
         
             directLink
@@ -142,11 +136,8 @@ export const GET_BUSINESS_PREMISES_BY_ID = gql`
             }
             
             owner {
-                type
-                user {
-                    phone
-                    name
-                }
+                phone
+                name
             }
         
             directLink
@@ -176,11 +167,8 @@ export const GET_MOTAL_BY_ID = gql`
             }
             
             owner {
-                type
-                user {
-                    phone
-                    name
-                }
+                phone
+                name
             }
         
             directLink

@@ -27,7 +27,7 @@ const TransactionMenu: FunctionComponent<TransactionMenuProps> = ({ status, onCh
                     }]}
                 >
                     <TouchableOpacity onPress={() => onChangeMenu(TransactionStatus.DatCoc)}>
-                        <Text style={styles.text}>Đã đặt cọc</Text>
+                        <Text style={styles.text}>Đang giao dịch</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={[styles.menuItem, {

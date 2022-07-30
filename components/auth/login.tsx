@@ -1,7 +1,9 @@
 import { FunctionComponent, useCallback, useState } from "react";
-import { ActivityIndicator, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Image, Modal, Platform, Pressable, SafeAreaView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Ant from 'react-native-vector-icons/AntDesign'
 import { loginImage } from "../../constants/images";
+import Checkbox from 'expo-checkbox';
+import WebView from "react-native-webview";
 
 interface LoginProps {
     error: string | undefined
@@ -9,13 +11,18 @@ interface LoginProps {
     login: (phone: string, password: string) => void
 }
 
-const Login: FunctionComponent<LoginProps> = ({ loading, login, error  }) => {
+const Login: FunctionComponent<LoginProps> = ({ loading, login, error }) => {
     const [loginForm, setLoginForm] = useState({
         phone: '',
         password: ''
     })
+    const [accepted, setAccepted] = useState(false)
+    const [requestForPivacy, setRequestForPivacy] = useState(false)
 
     const onLogin = useCallback(() => {
+        if (!loginForm.phone || !loginForm.password)
+            return;
+
         login(loginForm.phone, loginForm.password)
     }, [loginForm])
 
@@ -71,14 +78,55 @@ const Login: FunctionComponent<LoginProps> = ({ loading, login, error  }) => {
                     {loading
                         ? <ActivityIndicator />
                         : (
-                            <TouchableOpacity style={styles.actionBtn} disabled={loading} onPress={() => onLogin()}>
+                            <TouchableOpacity
+                                style={[styles.actionBtn, { backgroundColor: accepted ? "#ffb41f" : "#dcdcdc" }]}
+                                disabled={(loading || !accepted)}
+                                onPress={() => onLogin()}
+                            >
                                 <Text style={styles.actionTxt}>Đăng nhập</Text>
                             </TouchableOpacity>
                         )
                     }
                 </View>
                 {error
-                    && <Text style={{textAlign: 'center', color: "#f30606"}}>{error}</Text>
+                    && <Text style={{ textAlign: 'center', color: "#f30606", marginBottom: 8 }}>{error}</Text>
+                }
+                <View style={styles.pivacy}>
+                    <Checkbox
+                        style={{ marginRight: 12 }}
+                        value={accepted}
+                        onValueChange={() => setAccepted(s => !s)}
+                        color={accepted ? '#4630EB' : undefined}
+                    />
+                    <TouchableOpacity onPress={() => setRequestForPivacy(true)}>
+                        <Text>Đồng ý với <Text style={{ color: "#14a7fa" }}>chính sách </Text>và <Text style={{ color: "#14a7fa" }}>quyển riêng tư</Text></Text>
+                    </TouchableOpacity>
+                </View>
+                {requestForPivacy
+                    && (
+                        <Modal
+                            animationType="slide"
+                            visible={requestForPivacy}
+                            onRequestClose={() => setRequestForPivacy(false)}
+                        >
+                            <SafeAreaView style={{flex: 1, paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0}}>
+                                <View style={{ backgroundColor: "#ffb41f", padding: 12, flexDirection: 'row', alignItems: "center" }}>
+                                    <Pressable style={{ flex: 0.2 }} onPress={() => setRequestForPivacy(false)}>
+                                        <Ant 
+                                            name="close"
+                                            size={24}
+                                        />
+                                    </Pressable>
+                                    <Text style={{ flex: 0.6, textAlign: 'center', fontWeight: '600', fontSize: 16 }}> Điều khoản dịch vụ </Text>
+                                    <View style={{ flex: 0.2 }}></View>
+                                </View>
+                                <WebView
+                                    style={styles.container}
+                                    source={{ uri: 'https://www.freeprivacypolicy.com/live/35e54375-943c-43d8-830b-78e9d13ce080' }}
+                                />
+                            </SafeAreaView>
+                        </Modal>
+                    )
                 }
             </View>
         </View>
@@ -134,6 +182,11 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         textAlign: 'center',
         color: "#fff"
+    },
+    pivacy: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center'
     }
 })
 

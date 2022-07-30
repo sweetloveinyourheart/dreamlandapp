@@ -92,9 +92,19 @@ const OutstandingItems: FunctionComponent<OutstandingItemsProps> = ({ data, load
                     </View>
                 </View>
             </View>
-            <ScrollView horizontal>
-                {renderItems()}
-            </ScrollView>
+            {data.length === 0
+                ? (
+                    <View style={styles.noItems}>
+                        <Text style={styles.noItemsTxt}>Chưa có dữ liệu hiển thị</Text>
+                    </View>
+                )
+                : (
+                    <ScrollView horizontal>
+                        {renderItems()}
+                    </ScrollView>
+                )
+            }
+
         </View>
     );
 }
@@ -166,6 +176,16 @@ const styles = StyleSheet.create({
         fontSize: 13,
         flex: 0.5,
         textAlign: 'right',
+        color: "#777"
+    },
+    noItems: {
+        borderTopWidth: 1,
+        borderTopColor: "#dcdcdc",
+        height: 150,
+        justifyContent: 'center'
+    },
+    noItemsTxt: {
+        textAlign: 'center',
         color: "#777"
     }
 })

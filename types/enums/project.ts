@@ -17,3 +17,11 @@ export enum ProjectUtilities {
     BaoVe24 = 'BaoVe24',
     NhaThongMinh = 'hNhaThongMinh'
 }
+
+export enum ProjectProductStatus {
+    Available = 'Available',
+    Disable = 'Ddisable',
+    Lock = 'Lock',
+    DatCoc = 'DatCoc',
+    BanGiao = 'BanGiao'
+}

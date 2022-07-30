@@ -2,17 +2,28 @@ import { Dispatch, FunctionComponent, SetStateAction, useCallback, useState } fr
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { cameraIcon } from "../../../constants/images";
 import * as ImagePicker from 'expo-image-picker';
-
-export interface UploadedImage { height: number, type: string, uri: string, width: number, base64: string }
+import { manipulateAsync, FlipType, SaveFormat, ImageResult } from 'expo-image-manipulator';
 
 interface ImageUploadProps {
-    images: UploadedImage[]
-    setImages: Dispatch<SetStateAction<UploadedImage[]>>
+    images: ImageResult[]
+    setImages: Dispatch<SetStateAction<ImageResult[]>>
 }
 
 const ImageUpload: FunctionComponent<ImageUploadProps> = ({ images, setImages }) => {
 
     const onSelectImage = useCallback(async () => {
+        const { status: existingStatus } = await ImagePicker.getMediaLibraryPermissionsAsync()
+
+        let finalStatus = existingStatus;
+        if (existingStatus !== 'granted') {
+            const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+            finalStatus = status;
+        }
+        if (finalStatus !== 'granted') {
+            alert('Quyền gửi thông báo chưa được cho phép!');
+            return;
+        }
+
         let result: any = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
@@ -22,7 +33,13 @@ const ImageUpload: FunctionComponent<ImageUploadProps> = ({ images, setImages })
         });
 
         if (!result.cancelled) {
-            setImages(s => ([...s, result]));
+            const manipResult = await manipulateAsync(
+                result.uri,
+                [{ resize: { width: 1024, height: 768 } }],
+                { format: SaveFormat.JPEG, base64: true }
+            );
+
+            setImages(s => ([...s, manipResult]));
         }
     }, [setImages])
 

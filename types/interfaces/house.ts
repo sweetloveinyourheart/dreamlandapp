@@ -11,7 +11,6 @@ import { ProjectInterface } from "./project"
 import { RealEstateFilter } from "./realEstate"
 
 interface HouseAddress {
-    projectName?: string
     houseNumber?: string
     showHouseNumber?: boolean
     province: string
@@ -51,8 +50,6 @@ export interface HouseInterface {
             total: number
             deposit?: number
         }
-
-        project?: ProjectInterface
     }
 
     overview: {
@@ -68,8 +65,8 @@ export interface HouseInterface {
     }
 
     owner: {
-        type: OwnerType
-        user: any
+        name: string
+        phone: string
     }
 
     timeStamp: Date
@@ -89,5 +86,4 @@ export type HouseFilter = RealEstateFilter & {
     carAlley?: boolean
     noHau?: boolean
     frontispiece?: boolean
-    project?: string
 }

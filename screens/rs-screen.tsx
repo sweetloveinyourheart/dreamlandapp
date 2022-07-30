@@ -254,7 +254,7 @@ function RealEstateScreen({ route }: any) {
                 >
                     <RealEstateCategory category={filter.category} type={postsType} onChangeType={onChangeType} />
                     <View style={{ padding: 12, backgroundColor: "#fff" }}>
-                        <RealEstateItem category={filter.category} data={posts} display={dataDisplay} />
+                        <RealEstateItem data={posts} display={dataDisplay} />
                     </View>
                 </ScrollView>
             </SafeAreaView>

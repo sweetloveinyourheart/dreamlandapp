@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "Điền Khôi",
+    "name": "Real Land",
     "slug": "dienkhoiland",
-    "version": "0.0.1",
+    "version": "0.0.3",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -20,7 +20,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.bgroup.dienkhoiland",
-      "buildNumber": "0.0.1",
+      "buildNumber": "0.0.3",
       "infoPlist": {
         "NSPhotoLibraryUsageDescription": "Ứng dụng cần truy cập vào Thư viện để tải hình ảnh bài đăng"
       }
@@ -39,7 +39,7 @@
       [
         "expo-image-picker",
         {
-          "photosPermission": "Cho phép $(PRODUCT_NAME) truy cập vào Thư viện của bạn"
+          "photosPermission": "Ứng dụng cần truy cập vào Thư viện để tải hình ảnh bài đăng"
         }
       ]
     ]

@@ -306,24 +306,38 @@ const ProjectDetail: FunctionComponent<ProjectDetailProps> = ({ data }) => {
                 </Text>
             </View>
 
+            <View style={styles.product}>
+                <View style={styles.groupHeader}>
+                    <Text style={styles.headerTxt}>Sản phẩm dự án</Text>
+                    <Image
+                        source={line}
+                        style={{
+                            width: '100%'
+                        }}
+                    />
+                </View>
+            </View>
+
             {data.googleMapsLink
-                && (
+                ? (
                     <AddressViewer
                         uri={data.googleMapsLink}
                         active={addressModalActive}
                         onClose={onCloseAddressModal}
                     />
                 )
+                : (<View></View>)
             }
 
             {data.virtual3DLink
-                && (
+                ? (
                     <VirtualViewer
                         uri={data.virtual3DLink}
                         active={virtualModalActive}
                         onClose={onCloseVirtualModal}
                     />
                 )
+                : (<View></View>)
             }
         </View>
     );
@@ -331,7 +345,8 @@ const ProjectDetail: FunctionComponent<ProjectDetailProps> = ({ data }) => {
 
 const styles = StyleSheet.create({
     container: {
-        padding: 12,
+        paddingHorizontal: 12,
+        paddingTop: 12,
         backgroundColor: "#fff"
     },
     title: {
@@ -449,6 +464,9 @@ const styles = StyleSheet.create({
     },
     investorAbout: {
         textAlign: 'center'
+    },
+    product: {
+        marginTop: 24,
     }
 })
 

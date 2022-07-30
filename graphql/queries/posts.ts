@@ -1,6 +1,4 @@
 import { gql } from "@apollo/client";
-import { ProjectInterface } from "../../types/interfaces/project";
-import { AddressFilter, PaginationFilter } from "../../types/interfaces/realEstate";
 
 export const GET_APARTMENT_POST_BY_DIRECT_LINK = gql`
     query Apartment($link: String!) {
@@ -29,17 +27,11 @@ export const GET_APARTMENT_POST_BY_DIRECT_LINK = gql`
                 acreage {
                     totalAcreage
                 }
-                project {
-                    directLink
-                    projectName
-                }
+                
             }
             owner {
-                type
-                user {
-                    name
-                    phone
-                }
+                name
+                phone
             }
             overview {
                 doorDirection
@@ -86,17 +78,11 @@ export const GET_HOUSE_POST_BY_DIRECT_LINK = gql`
                 acreage {
                     totalAcreage
                 }
-                project {
-                    directLink
-                    projectName
-                }
+                
             }
             owner {
-                type
-                user {
-                    name
-                    phone
-                }
+                name
+                phone
             }
             overview {
                 doorDirection
@@ -144,17 +130,11 @@ export const GET_LAND_POST_BY_DIRECT_LINK = gql`
                     width
                     height
                 }
-                project {
-                    directLink
-                    projectName
-                }
+                
             }
             owner {
-                type
-                user {
-                    name
-                    phone
-                }
+                name
+                phone
             }
             overview {
                 doorDirection
@@ -198,17 +178,11 @@ export const GET_BUSINESS_PREMISES_POST_BY_DIRECT_LINK = gql`
                 acreage {
                     totalAcreage
                 }
-                project {
-                    directLink
-                    projectName
-                }
+                
             }
             owner {
-                type
-                user {
-                    name
-                    phone
-                }
+                name
+                phone
             }
             overview {
                 doorDirection
@@ -253,11 +227,8 @@ export const GET_MOTAL_POST_BY_DIRECT_LINK = gql`
                 }
             }
             owner {
-                type
-                user {
-                    name
-                    phone
-                }
+                name
+                phone
             }
             overview {
                 doorDirection

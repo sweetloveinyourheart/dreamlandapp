@@ -79,5 +79,6 @@ export enum PostStatus {
     Available = 'Available',
     Lock = 'Lock',
     DatCoc = 'DatCoc',
-    BanGiao = 'BanGiao'
+    BanGiao = 'BanGiao',
+    Pending = 'Pending'
 }

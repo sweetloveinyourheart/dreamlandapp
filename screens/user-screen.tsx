@@ -50,10 +50,20 @@ const UserScreen: FunctionComponent<UserScreenProps> = () => {
                         {user?.roles?.find(role => role === UserRole.Manager)
                             && (
                                 <TouchableOpacity
-                                    style={[styles.actionItem, { backgroundColor: "#ffb41f" }]}
+                                    style={[styles.actionItem, { borderColor: "#14a7fa", borderWidth: 1, backgroundColor: "#fff" }]}
                                     onPress={() => linkTo('/upload-screen')}
                                 >
-                                    <Text style={styles.actionItemTxt}>Thêm bài đăng</Text>
+                                    <Text style={[styles.actionItemTxt, { color: "#14a7fa" }]}>Thêm bài đăng</Text>
+                                </TouchableOpacity>
+                            )
+                        }
+                        {user?.roles?.find(role => role === UserRole.Manager)
+                            && (
+                                <TouchableOpacity
+                                    style={[styles.actionItem, { borderColor: "#14a7fa", borderWidth: 1, backgroundColor: "#fff" }]}
+                                    onPress={() => linkTo('/uploaded-screen')}
+                                >
+                                    <Text style={[styles.actionItemTxt, { color: "#14a7fa" }]}>Xem tin đã đăng</Text>
                                 </TouchableOpacity>
                             )
                         }

@@ -1,51 +1,13 @@
 import { useApolloClient, useLazyQuery } from "@apollo/client";
-import { createContext, Fragment, useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { LOGIN, LoginData, LoginVars } from "../graphql/queries/auth";
+import { createContext, Fragment, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
+import { LOGIN, LoginData, LoginVars, REFRESH_TOKEN } from "../graphql/queries/auth";
 import { GetProfileData, GET_PROFILE } from "../graphql/queries/user";
 import { Profile } from "../types/interfaces/user";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { KeyboardAvoidingView, Platform, SafeAreaView } from "react-native";
 import Login from "../components/auth/login";
-import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
-
-Notifications.setNotificationHandler({
-    handleNotification: async () => ({
-        shouldShowAlert: true,
-        shouldPlaySound: false,
-        shouldSetBadge: false,
-    }),
-});
-
-async function registerForPushNotificationsAsync() {
-    let token;
-    if (Device.isDevice) {
-        const { status: existingStatus } = await Notifications.getPermissionsAsync();
-        let finalStatus = existingStatus;
-        if (existingStatus !== 'granted') {
-            const { status } = await Notifications.requestPermissionsAsync();
-            finalStatus = status;
-        }
-        if (finalStatus !== 'granted') {
-            alert('Quyền gửi thông báo chưa được cho phép!');
-            return;
-        }
-        token = (await Notifications.getExpoPushTokenAsync()).data;
-    } else {
-        alert('Bạn phải dùng thiết bị di động để nhận thông báo');
-    }
-
-    if (Platform.OS === 'android') {
-        Notifications.setNotificationChannelAsync('default', {
-            name: 'default',
-            importance: Notifications.AndroidImportance.MAX,
-            vibrationPattern: [0, 250, 250, 250],
-            lightColor: '#FF231F7C',
-        });
-    }
-
-    return token;
-}
+import { usePushNotification } from "./notification";
 
 interface AuthenticationInterface {
     user: Profile | null | undefined
@@ -65,16 +27,22 @@ export function AuthProvider({ children }: { children: any }) {
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | undefined>()
 
+    const intervalRef = useRef<any>()
+
     const [profileQuery, { data: profileData, error: profileError, loading: profileLoading }] = useLazyQuery<GetProfileData>(GET_PROFILE, {
         notifyOnNetworkStatusChange: true,
         fetchPolicy: 'network-only'
     })
+
     const [loginQuery, { data: loginData, error: loginError, loading: loginLoading }] = useLazyQuery<LoginData, LoginVars>(LOGIN, {
         notifyOnNetworkStatusChange: true,
         fetchPolicy: 'network-only'
     })
 
+    const [refreshTokenQuery, { data: refreshData, error: refreshError }] = useLazyQuery(REFRESH_TOKEN)
+
     const client = useApolloClient()
+    const pushNotification = usePushNotification()
 
     useEffect(() => {
         // First query for profile if refresh token is exist
@@ -87,6 +55,19 @@ export function AuthProvider({ children }: { children: any }) {
                     profileQuery()
                 }
             })()
+
+        if (user) {
+            (async () => {
+                const token = await AsyncStorage.getItem('refreshToken')
+
+                if (token) {
+                    // Retry request
+                    const interval = setInterval(() => refreshTokenQuery({ variables: { refreshToken: token } }), 15 * 60 * 1000);
+                    intervalRef.current = interval;
+                    return () => clearInterval(interval);
+                }
+            })()
+        }
     }, [user])
 
     useEffect(() => {
@@ -122,8 +103,27 @@ export function AuthProvider({ children }: { children: any }) {
         }
     }, [profileData, profileError])
 
+    useEffect(() => {
+        // handle refresh token
+        if (refreshData && !refreshError) {
+            (async () => {
+                const { accessToken } = refreshData.refreshToken
+                await AsyncStorage.setItem('accessToken', accessToken)
+            })()
+        }
+
+        if(refreshError) {
+            (async () => {
+                await AsyncStorage.removeItem('refreshToken')
+                setUser(null)
+                clearInterval(intervalRef.current)
+            })
+        }
+
+    }, [refreshData, refreshError])
+
     const login = useCallback(async (phone: string, password: string) => {
-        const expoPushToken = await registerForPushNotificationsAsync()
+        const expoPushToken = await pushNotification.registerNotification()
         const OS = Device.osName
 
         loginQuery({
