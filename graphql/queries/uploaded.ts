@@ -5,10 +5,11 @@ import { BusinessPremisesInterface } from "../../types/interfaces/businessPremis
 import { HouseInterface } from "../../types/interfaces/house";
 import { LandInterface } from "../../types/interfaces/land";
 import { MotalInterface } from "../../types/interfaces/motal";
+import { PaginationFilter } from "../../types/interfaces/realEstate";
 
 export const GET_UPLOADED_POSTS = gql`
-    query Uploaded($status: PostStatus!) {
-        posts: getUploadedPosts(status: $status) {
+    query Uploaded($paging: PaginationArgs, $status: PostStatus!) {
+        posts: getUploadedPosts(paging: $paging, status: $status) {
             apartments {
                 __typename
                 title
@@ -147,5 +148,6 @@ export interface UploadedData {
 }
 
 export interface UploadedVars {
+    paging?: PaginationFilter
     status: PostStatus
 }

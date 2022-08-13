@@ -1,6 +1,6 @@
 import { useQuery } from "@apollo/client";
 import { FunctionComponent, useEffect, useState } from "react";
-import { ActivityIndicator, Image, StyleSheet, View } from "react-native";
+import { ActivityIndicator, Image, Linking, Pressable, StyleSheet, View } from "react-native";
 import { GET_PAGE_TEMPLATE, PageTemplateData } from "../../graphql/queries/home";
 import SpinnerLoading from "../loading/spinner";
 
@@ -15,7 +15,7 @@ const Banner: FunctionComponent<BannerProps> = () => {
         }
     })
 
-    const [banner, setBanner] = useState<string | undefined>()
+    const [banner, setBanner] = useState<{ imgUrl: string, directLink: string | null }>()
 
     useEffect(() => {
         if (data && !error) {
@@ -23,22 +23,36 @@ const Banner: FunctionComponent<BannerProps> = () => {
         }
     }, [data, error])
 
+    const onPress = async () => {
+        if(!banner || !banner.directLink) return;
+
+        const supported = await Linking.canOpenURL(banner.directLink);
+
+        if (supported) {
+            // Opening the link with some app, if the URL scheme is "http" the web link should be opened
+            // by some browser in the mobile
+            await Linking.openURL(banner.directLink);
+        }
+    }
+
     if (loading) {
-        return <SpinnerLoading height={150}/>
+        return <SpinnerLoading height={150} />
     }
 
     return (
         <View style={styles.container}>
-            {banner
-                && (
-                    <Image
-                        source={{
-                            uri: banner
-                        }}
-                        style={styles.image}
-                    />
-                )
-            }
+            <Pressable style={styles.press} onPress={onPress}>
+                {banner
+                    && (
+                        <Image
+                            source={{
+                                uri: banner.imgUrl
+                            }}
+                            style={styles.image}
+                        />
+                    )
+                }
+            </Pressable>
         </View>
     );
 }
@@ -46,6 +60,9 @@ const Banner: FunctionComponent<BannerProps> = () => {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: "#eee",
+        height: 150
+    },
+    press: {
         height: 150
     },
     image: {

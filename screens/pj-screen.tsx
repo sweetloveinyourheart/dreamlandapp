@@ -6,8 +6,6 @@ import PJBrowseHeader from "../components/headers/pj-browse-header";
 import { ProjectItems } from "../components/items/project-items";
 import { GetProjectsData, GetProjectsVars, GET_PROJECT_POSTS, ProjectFilterInterface } from "../graphql/queries/pj-list";
 import { ProjectInterface } from "../types/interfaces/project";
-import { PaginationFilter } from "../types/interfaces/realEstate";
-import { isCloseToBottom } from "./rs-screen";
 
 function ProjectsScreen() {
     const [filter, setFilter] = useState<ProjectFilterInterface>()

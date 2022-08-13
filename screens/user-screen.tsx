@@ -30,7 +30,7 @@ const UserScreen: FunctionComponent<UserScreenProps> = () => {
                     <Profile user={user} />
                     <View style={styles.history}>
                         <View style={styles.historyHead}>
-                            <Text style={styles.historyHeadTxt}>Bài đăng vừa xem</Text>
+                            <Text style={styles.historyHeadTxt}>Sản phẩm vừa xem</Text>
                         </View>
                         {history.length > 0
                             ? (
@@ -53,7 +53,7 @@ const UserScreen: FunctionComponent<UserScreenProps> = () => {
                                     style={[styles.actionItem, { borderColor: "#14a7fa", borderWidth: 1, backgroundColor: "#fff" }]}
                                     onPress={() => linkTo('/upload-screen')}
                                 >
-                                    <Text style={[styles.actionItemTxt, { color: "#14a7fa" }]}>Thêm bài đăng</Text>
+                                    <Text style={[styles.actionItemTxt, { color: "#14a7fa" }]}>Thêm sản phẩm</Text>
                                 </TouchableOpacity>
                             )
                         }
@@ -63,7 +63,7 @@ const UserScreen: FunctionComponent<UserScreenProps> = () => {
                                     style={[styles.actionItem, { borderColor: "#14a7fa", borderWidth: 1, backgroundColor: "#fff" }]}
                                     onPress={() => linkTo('/uploaded-screen')}
                                 >
-                                    <Text style={[styles.actionItemTxt, { color: "#14a7fa" }]}>Xem tin đã đăng</Text>
+                                    <Text style={[styles.actionItemTxt, { color: "#14a7fa" }]}>Xem sản phẩm đã đăng</Text>
                                 </TouchableOpacity>
                             )
                         }

@@ -1,4 +1,3 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useLinkTo } from "@react-navigation/native";
 import { FunctionComponent } from "react";
 import { Modal, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
@@ -13,19 +12,21 @@ interface NotificationBoxProps {
 
 const NotificationBox: FunctionComponent<NotificationBoxProps> = ({ onClose, visible }) => {
 
-    const { notifications } = usePushNotification()
+    const { notifications, updateNotificationState } = usePushNotification()
     const linkTo = useLinkTo()
 
-    const onPress = async () => {
+    const onPress = async (index: number) => {
+        let current = notifications
+        current.splice(index, 1)
+        updateNotificationState(current)
         onClose()
         linkTo('/transaction-screen')
-        await AsyncStorage.removeItem('notifications')
     }
 
     const showNotifications = () => {
         return notifications.map((noti, index) => {
             return (
-                <Pressable style={styles.item} onPress={() => onPress()} key={index}>
+                <Pressable style={styles.item} onPress={() => onPress(index)} key={index}>
                     <View style={styles.itemDot}>
                         <Octicons name="dot-fill" color={"#06e763"} size={18} />
                     </View>

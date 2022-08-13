@@ -78,8 +78,8 @@ const HomeScreen: FunctionComponent<HomeScreenProps> = () => {
                 >
                     <Banner />
                     <HomeCategory />
-                    <RealEstateItems category={RealEstateCategory.MuaBan} data={sellingPosts} loading={topPostsResult.loading} title="Mua bán bất động sản" />
                     <RealEstateItems category={RealEstateCategory.ChoThue} data={rentingPosts} loading={topPostsResult.loading} title="Bất động sản cho thuê" />
+                    <RealEstateItems category={RealEstateCategory.MuaBan} data={sellingPosts} loading={topPostsResult.loading} title="Mua bán bất động sản" />
                     <OutstandingItems data={outstandingPosts} loading={outstandingPostsResult.loading} />
                     <ProjectItems data={projects} loading={projectsQueryResult.loading} />
                 </ScrollView>

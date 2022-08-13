@@ -39,7 +39,7 @@ export function AuthProvider({ children }: { children: any }) {
         fetchPolicy: 'network-only'
     })
 
-    const [refreshTokenQuery, { data: refreshData, error: refreshError }] = useLazyQuery(REFRESH_TOKEN)
+    const [refreshTokenQuery, { data: refreshData, error: refreshError }] = useLazyQuery(REFRESH_TOKEN, { fetchPolicy: "no-cache" })
 
     const client = useApolloClient()
     const pushNotification = usePushNotification()
@@ -62,7 +62,8 @@ export function AuthProvider({ children }: { children: any }) {
 
                 if (token) {
                     // Retry request
-                    const interval = setInterval(() => refreshTokenQuery({ variables: { refreshToken: token } }), 15 * 60 * 1000);
+                    const interval = setInterval(async() => {
+                        refreshTokenQuery({ variables: { refreshToken: token } })}, 30 * 60 * 1000);
                     intervalRef.current = interval;
                     return () => clearInterval(interval);
                 }
@@ -107,6 +108,8 @@ export function AuthProvider({ children }: { children: any }) {
         // handle refresh token
         if (refreshData && !refreshError) {
             (async () => {
+                console.log("token");
+                
                 const { accessToken } = refreshData.refreshToken
                 await AsyncStorage.setItem('accessToken', accessToken)
             })()
@@ -114,8 +117,9 @@ export function AuthProvider({ children }: { children: any }) {
 
         if(refreshError) {
             (async () => {
-                await AsyncStorage.removeItem('refreshToken')
-                setUser(null)
+                // await AsyncStorage.removeItem('refreshToken')
+                // setUser(null)
+                logout()
                 clearInterval(intervalRef.current)
             })
         }

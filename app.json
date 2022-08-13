@@ -2,7 +2,7 @@
   "expo": {
     "name": "Real Land",
     "slug": "dienkhoiland",
-    "version": "0.0.3",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -20,17 +20,19 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.bgroup.dienkhoiland",
-      "buildNumber": "0.0.3",
+      "buildNumber": "1.0.1",
       "infoPlist": {
         "NSPhotoLibraryUsageDescription": "Ứng dụng cần truy cập vào Thư viện để tải hình ảnh bài đăng"
       }
     },
     "android": {
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.bgroup.dienkhoiland"
+      "package": "com.bgroup.dienkhoiland",
+      "permissions": ["RECORD_AUDIO", "CAMERA"]
     },
     "web": {
       "favicon": "./assets/favicon.png"

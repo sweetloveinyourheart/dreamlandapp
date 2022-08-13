@@ -6,8 +6,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface NotificationInterface {
     notifications: Notifications.Notification[];
+    updateNotificationState: (noti: Notifications.Notification[]) => void
     registerNotification: () => Promise<string | undefined>;
 }
+
 
 Notifications.setNotificationHandler({
     handleNotification: async (notification) => {
@@ -66,18 +68,29 @@ export function NotificationProvider({ children }: { children: any }) {
         setNotifications(s => [...s, notification]);
     }
 
+    const handleNotificationResponse = (event: Notifications.NotificationResponse) => {
+        setNotifications(s => [...s, event.notification]);
+    }
+
     useEffect(() => {
         (async () => {
             const notifications = JSON.parse(await AsyncStorage.getItem('notifications') || "[]")
             setNotifications(s => [...s, ...notifications])
         })()
         Notifications.addNotificationReceivedListener(handleNotification)
+        Notifications.addNotificationResponseReceivedListener(handleNotificationResponse)
     }, [])
+
+    const updateNotificationState = useCallback(async (noti: Notifications.Notification[]) => {
+        setNotifications(noti)
+        await AsyncStorage.setItem('notifications', JSON.stringify(noti))
+    }, [setNotifications, AsyncStorage])
 
     const memoedValue = useMemo(() => ({
         notifications,
+        updateNotificationState,
         registerNotification: registerForPushNotificationsAsync
-    }), [notifications, registerForPushNotificationsAsync])
+    }), [notifications, registerForPushNotificationsAsync, updateNotificationState])
 
     return (
         <NotificationContext.Provider value={memoedValue}>

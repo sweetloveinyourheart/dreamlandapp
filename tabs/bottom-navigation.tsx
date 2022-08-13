@@ -36,7 +36,7 @@ export function Tabs() {
                 name="rs-screen"
                 component={RealEstateScreen}
                 options={{
-                    tabBarLabel: "Bài đăng",
+                    tabBarLabel: "Sản phẩm",
                     tabBarIcon: ({ color }) => (
                         <Ant 
                             name='isv' 

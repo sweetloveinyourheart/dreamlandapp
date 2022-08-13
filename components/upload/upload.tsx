@@ -151,7 +151,7 @@ const UploadPost: FunctionComponent<UploadPostProps> = () => {
         if (createApartmentData || createHouseData || createLandData || createBusinessPremisesData || createMotalData) {
             setResult({
                 status: 1,
-                message: 'Đăng tin thành công, quản trị viên sẽ tiến hành duyệt bài',
+                message: 'Đăng tải thành công, quản trị viên sẽ tiến hành duyệt bài',
                 active: true,
                 isUploading: false
             })
@@ -163,7 +163,7 @@ const UploadPost: FunctionComponent<UploadPostProps> = () => {
         if (createApartmentErr || createHouseErr || createLandErr || createBusinessPremisesErr || createMotalErr) {
             setResult({
                 status: -1,
-                message: 'Đăng tin thất bại, vui lòng thử lại',
+                message: 'Đăng tải thất bại, vui lòng kiểm tra và thử lại',
                 active: true,
                 isUploading: false
             })
