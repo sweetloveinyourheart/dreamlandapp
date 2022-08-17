@@ -1,5 +1,5 @@
 import { useLinkTo } from "@react-navigation/native";
-import { Fragment, FunctionComponent } from "react";
+import { Fragment, FunctionComponent, useEffect } from "react";
 import { Platform, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import TabScreenHeader from "../components/headers/tab-screen-header";
 import { RealEstateItem } from "../components/items/rs-items";
@@ -22,8 +22,7 @@ const UserScreen: FunctionComponent<UserScreenProps> = () => {
         <Fragment>
             <SafeAreaView style={{ flex: 0, backgroundColor: '#ffb41f' }} />
             <SafeAreaView style={{
-                flex: 1,
-                paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0
+                flex: 1
             }}>
                 <TabScreenHeader title="Tài khoản người dùng" />
                 <ScrollView>

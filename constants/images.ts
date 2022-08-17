@@ -1,5 +1,6 @@
 // Logo
 export const logoImage = require('../assets/logo/logo-am-ban.png')
+export const logoImageN = require('../assets/logo/logo-duong-ban.png')
 
 // Categories
 export const sellingImage = require('../assets/icons/buildings.png')

@@ -7,8 +7,25 @@ import Ant from 'react-native-vector-icons/AntDesign'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import RealEstateScreen from '../screens/rs-screen';
 import ProjectsScreen from '../screens/pj-screen';
+import AuthenticationGuard from '../contexts/guard';
 
 const Tab = createBottomTabNavigator();
+
+const UserScreenComponent = () => {
+    return (
+        <AuthenticationGuard>
+            <UserScreen />
+        </AuthenticationGuard>
+    )
+}
+
+const TransactionScreenComponent = () => {
+    return (
+        <AuthenticationGuard>
+            <TransactionScreen />
+        </AuthenticationGuard>
+    )
+}
 
 export function Tabs() {
     return (
@@ -62,7 +79,7 @@ export function Tabs() {
             />
             <Tab.Screen
                 name="transaction-screen"
-                component={TransactionScreen}
+                component={TransactionScreenComponent}
                 options={{
                     tabBarLabel: 'Giao dịch',
                     tabBarIcon: ({ color }) => (
@@ -76,7 +93,7 @@ export function Tabs() {
             />
             <Tab.Screen
                 name="user-screen"
-                component={UserScreen}
+                component={UserScreenComponent}
                 options={{
                     tabBarLabel: 'Người dùng',
                     tabBarIcon: ({ color }) => (

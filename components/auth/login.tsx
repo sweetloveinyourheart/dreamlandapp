@@ -1,7 +1,7 @@
 import { FunctionComponent, useCallback, useState } from "react";
 import { ActivityIndicator, Image, Modal, Platform, Pressable, SafeAreaView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Ant from 'react-native-vector-icons/AntDesign'
-import { loginImage } from "../../constants/images";
+import { logoImageN } from "../../constants/images";
 import Checkbox from 'expo-checkbox';
 import WebView from "react-native-webview";
 
@@ -30,7 +30,7 @@ const Login: FunctionComponent<LoginProps> = ({ loading, login, error }) => {
         <View style={styles.container}>
             <View style={styles.image}>
                 <Image
-                    source={loginImage}
+                    source={logoImageN}
                     style={{
                         resizeMode: "contain",
                         flex: 1,
@@ -141,8 +141,9 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff"
     },
     image: {
-        height: 225,
-        width: '100%'
+        height: 100,
+        width: '100%',
+        paddingHorizontal: 32
     },
     loginArea: {
         width: '100%',

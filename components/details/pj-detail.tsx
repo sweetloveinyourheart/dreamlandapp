@@ -4,6 +4,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import Feather from 'react-native-vector-icons/Feather'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import NumberFormat from "react-number-format";
+import { useAuth } from "../../contexts/auth";
 import { moneyConverter } from "../../libs/moneyConverter";
 import { projectTypeTranslate } from "../../libs/speaker";
 import { ProjectInterface } from "../../types/interfaces/project";
@@ -19,6 +20,24 @@ const line = require('../../assets/decor/line.png')
 const ProjectDetail: FunctionComponent<ProjectDetailProps> = ({ data }) => {
     const [addressModalActive, setAddressModalActive] = useState<boolean>(false)
     const [virtualModalActive, setVirtualModalActive] = useState<boolean>(false)
+    
+    const { hasPermission } = useAuth()
+
+    const onPressAddress = () => {
+        const permission = hasPermission()
+        if (!permission || !data?.googleMapsLink)
+            return;
+
+        setAddressModalActive(true)
+    }
+
+    const onPressVirtual = () => {
+        const permission = hasPermission()
+        if (!permission || !data?.virtual3DLink)
+            return;
+
+        setVirtualModalActive(true)
+    }
 
     const onCloseAddressModal = useCallback(() => {
         setAddressModalActive(false)
@@ -80,12 +99,12 @@ const ProjectDetail: FunctionComponent<ProjectDetailProps> = ({ data }) => {
                 >
                     {data.projectName}
                 </Text>
-                <TouchableOpacity style={styles.virtual} onPress={() => setVirtualModalActive(true)}>
+                <TouchableOpacity style={styles.virtual} onPress={() => onPressVirtual()}>
                     <MaterialIcons name={"360"} size={20} color="#f93707" />
                     <Text style={{ fontSize: 10, textAlign: 'center', color: "#f93707" }}>360</Text>
                 </TouchableOpacity>
             </View>
-            <Pressable style={styles.addressArea} onPress={() => { setAddressModalActive(true) }}>
+            <Pressable style={styles.addressArea} onPress={() => onPressAddress()}>
                 <View style={styles.address}>
                     <View style={styles.addressIcon}>
                         <View style={{ flexDirection: 'row' }}>

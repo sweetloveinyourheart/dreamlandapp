@@ -4,16 +4,17 @@ import { LOGIN, LoginData, LoginVars, REFRESH_TOKEN } from "../graphql/queries/a
 import { GetProfileData, GET_PROFILE } from "../graphql/queries/user";
 import { Profile } from "../types/interfaces/user";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { KeyboardAvoidingView, Platform, SafeAreaView } from "react-native";
-import Login from "../components/auth/login";
 import * as Device from 'expo-device';
 import { usePushNotification } from "./notification";
+import { useLinkTo } from "@react-navigation/native";
 
 interface AuthenticationInterface {
     user: Profile | null | undefined
     loading: boolean
+    error: string | undefined
     login: (phone: string, password: string) => void
     logout: () => void
+    hasPermission: () => boolean
 }
 
 const AuthContext = createContext({} as AuthenticationInterface)
@@ -43,6 +44,8 @@ export function AuthProvider({ children }: { children: any }) {
 
     const client = useApolloClient()
     const pushNotification = usePushNotification()
+    const linkTo = useLinkTo()
+
 
     useEffect(() => {
         // First query for profile if refresh token is exist
@@ -62,8 +65,9 @@ export function AuthProvider({ children }: { children: any }) {
 
                 if (token) {
                     // Retry request
-                    const interval = setInterval(async() => {
-                        refreshTokenQuery({ variables: { refreshToken: token } })}, 30 * 60 * 1000);
+                    const interval = setInterval(async () => {
+                        refreshTokenQuery({ variables: { refreshToken: token } })
+                    }, 30 * 60 * 1000);
                     intervalRef.current = interval;
                     return () => clearInterval(interval);
                 }
@@ -109,13 +113,13 @@ export function AuthProvider({ children }: { children: any }) {
         if (refreshData && !refreshError) {
             (async () => {
                 console.log("token");
-                
+
                 const { accessToken } = refreshData.refreshToken
                 await AsyncStorage.setItem('accessToken', accessToken)
             })()
         }
 
-        if(refreshError) {
+        if (refreshError) {
             (async () => {
                 // await AsyncStorage.removeItem('refreshToken')
                 // setUser(null)
@@ -127,19 +131,33 @@ export function AuthProvider({ children }: { children: any }) {
     }, [refreshData, refreshError])
 
     const login = useCallback(async (phone: string, password: string) => {
-        const expoPushToken = await pushNotification.registerNotification()
-        const OS = Device.osName
+        try {
+            setLoading(true)
+            const expoPushToken = await pushNotification.registerNotification()
+            const OS = Device.osName
 
-        loginQuery({
-            variables: {
-                account: {
-                    phone,
-                    password
-                },
-                ...((expoPushToken && OS) && { device: { expoPushToken, OS } })
-            }
-        })
+            loginQuery({
+                variables: {
+                    account: {
+                        phone,
+                        password
+                    },
+                    ...((expoPushToken && OS) && { device: { expoPushToken, OS } })
+                }
+            })
+        } catch (error) {
+            alert(`error: ${error}`)
+        }
     }, [loginQuery])
+
+    const hasPermission = useCallback(() => {
+        if(!user) {
+            linkTo('/auth-screen')
+            return false
+        }
+
+        return true
+    }, [user])
 
     const logout = useCallback(async () => {
         await AsyncStorage.clear()
@@ -152,22 +170,10 @@ export function AuthProvider({ children }: { children: any }) {
         user,
         loading,
         login,
-        logout
-    }), [user, loading, login, logout])
-
-
-    if (!user) {
-        return (
-            <Fragment>
-                <SafeAreaView style={{ flex: 0, backgroundColor: '#fff' }} />
-                <SafeAreaView style={{ flex: 1 }}>
-                    <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1 }}>
-                        <Login loading={loading} login={login} error={error} />
-                    </KeyboardAvoidingView>
-                </SafeAreaView>
-            </Fragment>
-        )
-    }
+        logout,
+        error,
+        hasPermission
+    }), [user, loading, login, logout, error, hasPermission])
 
     return (
         <AuthContext.Provider value={memoedValue}>

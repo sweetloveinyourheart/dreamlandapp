@@ -20,6 +20,7 @@ import FlashMessage from "react-native-flash-message";
 import SearchScreen from "./screens/search-screen";
 import { NotificationProvider } from "./contexts/notification";
 import UploadedInfoScreen from "./screens/uploaded-info-screen";
+import AuthScreen from "./screens/auth-screen";
 
 let client: ApolloClient<any>
 
@@ -105,6 +106,7 @@ export default function App() {
                   <Stack.Screen name='upload-screen' component={UploadScreen} />
                   <Stack.Screen name='uploaded-screen' component={UploadedInfoScreen} />
                   <Stack.Screen name='search-screen' component={SearchScreen} />
+                  <Stack.Screen name='auth-screen' component={AuthScreen} />
                 </Stack.Navigator>
                 <FlashMessage position="center" />
               </AddressProvider>

@@ -66,8 +66,7 @@ function UploadedInfoScreen() {
         <Fragment>
             <SafeAreaView style={{ flex: 0, backgroundColor: '#ffb41f' }} />
             <SafeAreaView style={{
-                flex: 1,
-                paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0
+                flex: 1
             }}>
                 <UploadedHeader onReload={() => reload()} />
                 <UploadedMenu onChangeMenu={onSelectMenu} status={status} />

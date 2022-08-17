@@ -38,8 +38,7 @@ function ProjectsScreen() {
         <Fragment>
             <SafeAreaView style={{ flex: 0, backgroundColor: '#ffb41f' }} />
             <SafeAreaView style={{
-                flex: 1,
-                paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0
+                flex: 1
             }}>
                 <PJBrowseHeader onSearch={onSearch} />
                 <ProjectFilter 

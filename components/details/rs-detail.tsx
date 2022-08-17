@@ -12,10 +12,11 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import AddressViewer from "./modal/address";
 import VirtualViewer from "./modal/virtual";
 import { PostStatus, RealEstateCategory } from "../../types/enums/realEstate";
+import { useAuth } from "../../contexts/auth";
 
-export type PostDetail = Post & { 
-    timeStamp: Date, 
-    owner: { name: string, phone: string }, 
+export type PostDetail = Post & {
+    timeStamp: Date,
+    owner: { name: string, phone: string },
     postStatus: PostStatus,
     _id: string
 }
@@ -29,13 +30,31 @@ const RSDetail: FunctionComponent<RSDetailProps> = ({ data, type }) => {
     const [addressModalActive, setAddressModalActive] = useState<boolean>(false)
     const [virtualModalActive, setVirtualModalActive] = useState<boolean>(false)
 
+    const { hasPermission } = useAuth()
+
+    const onPressAddress = () => {
+        const permission = hasPermission()
+        if (!permission || !data?.googleMapsLink)
+            return;
+
+        setAddressModalActive(true)
+    }
+
+    const onPressVirtual = () => {
+        const permission = hasPermission()
+        if (!permission || !data?.virtual3DLink)
+            return;
+
+        setVirtualModalActive(true)
+    }
+
     const onCloseAddressModal = useCallback(() => {
         setAddressModalActive(false)
-    }, [addressModalActive])
+    }, [])
 
     const onCloseVirtualModal = useCallback(() => {
         setVirtualModalActive(false)
-    }, [virtualModalActive])
+    }, [])
 
     const postType = (item: any) => {
         // Get post types
@@ -74,7 +93,7 @@ const RSDetail: FunctionComponent<RSDetailProps> = ({ data, type }) => {
                 >
                     {data.title}
                 </Text>
-                <TouchableOpacity style={styles.virtual} onPress={() => setVirtualModalActive(true)}>
+                <TouchableOpacity style={styles.virtual} onPress={() => onPressVirtual()}>
                     <MaterialIcons name={"360"} size={20} color={data.virtual3DLink ? "green" : "#777"} />
                     <Text style={{ fontSize: 10, textAlign: 'center', color: data.virtual3DLink ? "green" : "#777" }}>360</Text>
                 </TouchableOpacity>
@@ -98,7 +117,7 @@ const RSDetail: FunctionComponent<RSDetailProps> = ({ data, type }) => {
                     /> {(Moment(data.timeStamp).format('DD/MM/YYYY'))}
                 </Text>
             </View>
-            <Pressable style={styles.addressArea} onPress={() => { setAddressModalActive(true) }}>
+            <Pressable style={styles.addressArea} onPress={() => onPressAddress()}>
                 <View style={styles.address}>
                     <View style={styles.addressIcon}>
                         <View style={{ flexDirection: 'row' }}>
@@ -283,7 +302,7 @@ const RSDetail: FunctionComponent<RSDetailProps> = ({ data, type }) => {
                 <Text>{data.description}</Text>
             </View>
 
-            {data.googleMapsLink 
+            {data.googleMapsLink
                 ? (
                     <AddressViewer
                         uri={data.googleMapsLink}

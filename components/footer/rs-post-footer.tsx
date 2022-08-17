@@ -8,6 +8,8 @@ import { showMessage } from "react-native-flash-message";
 import { typenameToEnum } from "../../libs/enumConverter";
 import { PostStatus } from "../../types/enums/realEstate";
 import { PostDetail } from "../details/rs-detail";
+import { useAuth } from "../../contexts/auth";
+import { useLinkTo } from "@react-navigation/native";
 
 interface RSPostFooterProps {
     data: PostDetail
@@ -19,6 +21,7 @@ const RSPostFooter: FunctionComponent<RSPostFooterProps> = ({ data, type }) => {
     const [modalVisible, setModalVisible] = useState(false)
 
     const [newTransaction, { data: transactionData, error, loading }] = useMutation<CreateTransactionData, CreateTransactionVars>(CREATE_TRANSACTION)
+    const { hasPermission } = useAuth()
 
     useEffect(() => {
         if (data.postStatus !== PostStatus.Available) {
@@ -56,7 +59,9 @@ const RSPostFooter: FunctionComponent<RSPostFooterProps> = ({ data, type }) => {
     }
 
     const pressTransaction = () => {
-        if(isRequested) return;
+        const permission = hasPermission()
+        if (isRequested || !permission)
+            return;
 
         setModalVisible(true)
     }

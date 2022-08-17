@@ -42,8 +42,7 @@ const ImageModal: FunctionComponent<ImageModalProps> = ({ selectedIndex, active,
 
 const styles = StyleSheet.create({
     view: {
-        flex: 1,
-        paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0
+        flex: 1
     },
     container: {
         flex: 1,

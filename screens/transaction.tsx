@@ -41,8 +41,7 @@ const TransactionScreen: FunctionComponent<TransactionScreenProps> = () => {
         <Fragment>
             <SafeAreaView style={{ flex: 0, backgroundColor: '#ffb41f' }} />
             <SafeAreaView style={{
-                flex: 1,
-                paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0
+                flex: 1
             }}>
                 <TransactionHeader onReload={() => reload()}/>
                 <TransactionMenu onChangeMenu={onSelectMenu} status={status} />

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "735003827422",
+    "project_id": "dienkhoiland",
+    "storage_bucket": "dienkhoiland.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:735003827422:android:07dba12a8930f5d7d5f64f",
+        "android_client_info": {
+          "package_name": "com.bgroup.dienkhoiland"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "735003827422-5q3l160k4uaokkl7lnafa07rvrp21qa9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCuCAu_3sgC_bjyZvJ80YuSKDL7IgZSPb0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "735003827422-5q3l160k4uaokkl7lnafa07rvrp21qa9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
